@@ -1,4 +1,4 @@
-# Multi-Path RefineNet
+# Multipath RefineNet
 This is the source code for our paper:
 
 "RefineNet: Multi-Path Refinement Networks with Identity Mappings for High-Resolution Semantic Segmentation";
