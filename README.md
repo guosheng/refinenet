@@ -26,7 +26,7 @@ If you find the code useful, please cite our work as
 
 ```
 @article{refinenet,
-  author    = {Guosheng Lin and Anton Milan and Chunhua Shen and Ian D. Reid},
+  author    = {Guosheng Lin and Anton Milan and Chunhua Shen and Ian Reid},
   title     = {RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation},
   year      = {2016},
   url       = {http://arxiv.org/abs/1611.06612},
