@@ -11,10 +11,12 @@ RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentat
   * `main/my_matlab_disp.sh`
 
 # Testing
-For now, only the model for the PASCAL VOC dataset is provided. More pretrained models will be available soon. 
+For now, only the model for the PASCAL VOC (ResNet-101) dataset is provided. More pretrained models will be available soon. 
 Please see the following demo scripts to run and evaluate it on a test image. Run
 * `demo_refinenet_test_voc_custom_data.m` to apply our model to a test image;
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the pretrained model;
+
+You can find the network graphs that illustrate our architecture in the folder `net_graphs`.
 
 # Training
 The following demo is provided for training a RefineNet on your own dataset
