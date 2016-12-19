@@ -26,9 +26,14 @@ If you find the code useful, please cite our work as
 
 ```
 @article{refinenet,
-  author    = {Guosheng Lin and Anton Milan and Chunhua Shen and Ian Reid},
-  title     = {RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation},
-  year      = {2016},
-  url       = {http://arxiv.org/abs/1611.06612},
-} 
+	title = {Refine{N}et: {M}ulti-Path Refinement Networks for High-Resolution Semantic Segmentation},
+	shorttitle = {RefineNet: Multi-Path Refinement Networks},
+	url = {https://arxiv.org/abs/1611.06612},
+	journal = {arXiv:1611.06612 [cs]},
+	author = {Lin, G. and Milan, A. and Shen, C. and Reid, I.},
+	month = nov,
+	year = {2016},
+	note = {arXiv: 1611.06612},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition}
+}
 ```
