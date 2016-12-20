@@ -6,7 +6,7 @@ RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentat
 # Installation
 * Install [MatConvNet](http://www.vlfeat.org/matconvnet/) and CuDNN.
 * A modified copy of MatConvNet is provided in `./lib/`. Details of this modification can be found in `main/my_matconvnet_resnet/README.txt`.
-* Example scripts for exporting lib paths are
+* An example script for exporting lib paths is
   * `main/my_matlab.sh` 
 * Download the following ImageNet pretrained models from [MatConvNet](http://www.vlfeat.org/matconvnet/pretrained/) and place them in `./model_trained/`.
   * `imagenet-resnet-50-dag, imagenet-resnet-101-dag, imagenet-resnet-152-dag` 
