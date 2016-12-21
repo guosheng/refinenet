@@ -40,3 +40,5 @@ If you find the code useful, please cite our work as
 	keywords = {Computer Science - Computer Vision and Pattern Recognition}
 }
 ```
+# License
+For academic usage, the released code is under the permissive BSD license. For any commercial usage, please contact the authors.
