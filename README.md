@@ -41,4 +41,4 @@ If you find the code useful, please cite our work as
 }
 ```
 # License
-For academic usage, the released code is under the permissive BSD license. For any commercial usage, please contact the authors.
+For academic usage, the code is released under the permissive BSD license. For any commercial purpose, please contact the authors.
