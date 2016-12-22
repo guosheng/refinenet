@@ -3,6 +3,11 @@ This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
 
 RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation". Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid.
 
+
+# Update notes
+We did a major update of our code on 23 Dec 2016. If you use an older version, please check out a new copy.
+
+
 # Installation
 * Install [MatConvNet](http://www.vlfeat.org/matconvnet/) and CuDNN.
 * A modified copy of MatConvNet is provided in `./lib/`. Details of this modification can be found in `main/my_matconvnet_resnet/README.txt`.
@@ -12,7 +17,16 @@ RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentat
   * `imagenet-resnet-50-dag, imagenet-resnet-101-dag, imagenet-resnet-152-dag` 
 
 # Testing
-For now, only the model for the PASCAL VOC (ResNet-101) dataset is provided. More pretrained models will be available soon. 
+
+<!-- For now, only the model for the PASCAL VOC (ResNet-101) dataset is provided. More trained models will be available soon.  -->
+
+Download the following pretrained models and put them in `./model_trained/`:
+
+* ReineNet trained on PASCAL VOC 2012 dataset for object segmentation (ResNet-101): [refinenet_res101_voc2012.mat](https://1drv.ms/u/s!AmxAc3Al6cbBa0btnxISOcd4t4M)
+* ReineNet trained on Person-Part dataset for object parsing (ResNet-101): refinenet_res101_person_parts.mat (coming soon)
+* ReineNet trained on Cityscapes dataset (ResNet-101) for street scene parsing: refinenet_res101_cityscapes.mat (coming soon)
+
+
 Please see the following demo scripts to run and evaluate it on a test image. Run
 * `demo_refinenet_test_voc_custom_data.m` to apply our model to a test image;
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the pretrained model;
