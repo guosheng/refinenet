@@ -2,7 +2,7 @@
 
 function my_net_backward(net_info, work_info_batch, data_info, net_run_config)
 
-    gpu_mode=net_info.ref.use_gpu;
+    gpu_mode=net_run_config.use_gpu;
       
     if gpu_mode
       if ~net_info.ref.net_on_gpu
@@ -32,13 +32,8 @@ end
 function do_backward(net_info, work_info_batch, data_info, net_run_config)
 
 
-current_step=work_info_batch.ref.epoch;
-
-lr_steps=net_info.ref.lr_steps;
-input_lr=lr_steps(min(length(lr_steps), current_step));
-
-
-net_info.ref.current_lr=input_lr;
+one_optimizer_param=work_info_batch.ref.gen_optimizer_param_fn(work_info_batch, net_info);
+net_info.ref.current_lr=one_optimizer_param.learning_rate;
 
 
 bp_start_layer=net_info.ref.bp_start_layer;
@@ -115,7 +110,7 @@ for layer_idx=layer_num:-1:bp_start_layer
     
     input_info.bp_finished=true;
     data_info.ref.output_info_layers{layer_idx}=input_info;
-    do_bp_update_one_layer(net_info, work_info_batch, input_info, layer_idx, input_lr);
+    do_bp_update_one_layer(net_info, work_info_batch, input_info, layer_idx, one_optimizer_param);
         
     data_info.ref.output_info_layers{layer_idx+1}=[];
 
@@ -134,7 +129,7 @@ end
 
 
 
-function do_bp_update_one_layer(net_info, work_info_batch, input_info, layer_idx, input_lr)
+function do_bp_update_one_layer(net_info, work_info_batch, input_info, layer_idx, one_optimizer_param)
 
     bp_start_layer=net_info.ref.bp_start_layer;
     if layer_idx<bp_start_layer
@@ -142,20 +137,14 @@ function do_bp_update_one_layer(net_info, work_info_batch, input_info, layer_idx
     end
            
 
-      ly = net_info.ref.layers{layer_idx} ;
-      lr=input_lr;
-
-      if isfield(ly, 'update_layer_config_fn') && ~isempty(ly.update_layer_config_fn)
-          ly.lr=lr;
-          ly=ly.update_layer_config_fn(ly, net_info, work_info_batch, data_info);
-          lr=ly.lr;
-      end
-      
+      ly=net_info.ref.layers{layer_idx} ;
+                         
 
       if strcmp(ly.type, 'conv') 
-
-            momentum_param=net_info.ref.momentum;
-            weightDecay_param=net_info.ref.weightDecay;
+          
+          lr=one_optimizer_param.learning_rate;
+          momentum_param=one_optimizer_param.momentum;
+          weightDecay_param=one_optimizer_param.weightDecay;
 
           ly.filtersMomentum = momentum_param * ly.filtersMomentum ...
               - weightDecay_param * ly.filtersWeightDecay ...

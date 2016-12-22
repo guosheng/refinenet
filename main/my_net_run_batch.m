@@ -3,18 +3,16 @@
 
 
 function my_net_run_batch(net_config, work_info_batch)
-
+        
     gen_data_info_groups_cache(net_config, work_info_batch);
-
     group_idx=net_config.ref.root_group_idx;
 
     data_info=init_one_data_info_from_cache(group_idx, work_info_batch);
-        
     input_info=work_info_batch.ref.ds_info.net_input_info;
-        
     data_info.ref.output_info_layers{1}=input_info;
     work_info_batch.ref.ds_info.net_input_info=[];
-    do_run_one_group( net_config, work_info_batch, group_idx, 'forward');
+        
+    do_run_one_pass(net_config, work_info_batch, group_idx);        
     
     work_info_batch.ref.data_info_groups=[];
             
@@ -22,8 +20,34 @@ end
     
 
 
-function do_run_one_group( net_config, work_info_batch, group_idx, group_run_type)
+function do_run_one_pass(net_config, work_info_batch, group_idx)
 
+    if work_info_batch.ref.net_run_verbose
+        fprintf('---- runing one pass, root_group_idx:%d\n', group_idx);
+    end
+    
+    do_run_one_group(net_config, work_info_batch, group_idx, 'forward');
+        
+    data_info=work_info_batch.ref.data_info_groups{group_idx};
+    last_layer_output_info=data_info.ref.output_info_layers{end};
+    assert(check_valid_net_output(last_layer_output_info));
+
+    if work_info_batch.ref.run_backward
+
+        init_dzdx=single(1);
+
+        last_layer_output_info.dzdx=init_dzdx;
+        last_layer_output_info.bp_finished=true;
+        data_info.ref.output_info_layers{end}=last_layer_output_info;
+
+        do_run_one_group(net_config, work_info_batch, group_idx, 'backward');
+    end
+ 
+end
+
+    
+
+function do_run_one_group(net_config, work_info_batch, group_idx, group_run_type)
 
 
 group_info=net_config.ref.group_infos{group_idx};
@@ -39,37 +63,22 @@ work_info_batch.ref.net_run_current_group_idx_linked=net_run_current_group_idx_l
 
 
 
-if net_config.ref.net_run_verbose
+if work_info_batch.ref.net_run_verbose
     fprintf('----start group_idx:%d, name:%s, run_type:%s\n', ...
         group_info.group_idx, group_info.name, group_run_type);
 end
 
 
+if strcmp(group_run_type, 'forward')
+    do_forward_one_group( net_config, work_info_batch, group_idx);
+end
 
-if group_info.independent_group
-    
-    if net_config.ref.net_run_verbose
-        fprintf('---- independent_group\n');
-    end
-    
-    do_run_indepent_group( net_config, work_info_batch, group_idx, group_run_type);        
-    
-else
-    
-    if strcmp(group_run_type, 'forward')
-        do_forward_one_group( net_config, work_info_batch, group_idx);
-    end
-    
-    if strcmp(group_run_type, 'backward')
-        do_backward_one_group( net_config, work_info_batch, group_idx);
-    end
-    
-    
+if strcmp(group_run_type, 'backward')
+    do_backward_one_group( net_config, work_info_batch, group_idx);
 end
 
 
-
-if net_config.ref.net_run_verbose
+if work_info_batch.ref.net_run_verbose
     fprintf('----finish group_idx:%d, name:%s, run_type:%s\n', ...
         group_info.group_idx, group_info.name, group_run_type);
 end
@@ -81,124 +90,11 @@ end
 
 
 
-function do_run_indepent_group( net_config, work_info_batch, group_idx, group_run_type)
-
-
-          
-    if strcmp(group_run_type, 'backward')
-        return;
-    end
-    
-    
-    group_run_info=[];
-    group_run_info.init_dzdx=single(1);
-    group_run_info.run_finish=false;
-    group_run_info.group_idx=group_idx;
-    group_run_info.stop_when_finish=false;
-    group_run_info.repeat_count=0;
-    
-    group_info=net_config.ref.group_infos{group_idx};
-    if ~isempty(group_info.indepgroup_init_fn)
-        group_run_info=group_info.indepgroup_init_fn(...
-            work_info_batch, group_info, group_run_info);
-    end
-    
-        
-    init_data_info=work_info_batch.ref.data_info_groups{group_idx}.ref;
-    first_layer_output_info_bp=[];
-               
-    repeat_count=0;
-    while ~group_run_info.run_finish
-                
-                
-        if isempty(group_info.indepgroup_run_config_fn)
-            group_run_info.run_finish=true;
-        else
-            group_run_info=group_info.indepgroup_run_config_fn(...
-                work_info_batch, group_info, group_run_info);
-        end
-        
-        if group_run_info.run_finish && group_run_info.stop_when_finish
-            break;
-        end
-        
-        repeat_count=repeat_count+1;
-        group_run_info.repeat_count=repeat_count;
-                        
-        
-        if net_config.ref.net_run_verbose
-            if repeat_count>2
-                fprintf('----repeat group_idx:%d, name:%s, repeat count:%d\n',...
-                    group_info.group_idx, group_info.name, repeat_count);
-            end
-        end
-        
-        % for repeat running:
-        data_info=work_info_batch.ref.data_info_groups{group_idx};
-        data_info.ref=init_data_info;
-            
-                
-        do_forward_one_group( net_config, work_info_batch, group_idx);
-                
-        
-        layer_num=length(data_info.ref.output_info_layers);
-        last_layer_output_info=data_info.ref.output_info_layers{end};
-        assert(check_valid_net_output(last_layer_output_info));
-                
-        if work_info_batch.ref.run_backward
-            data_info=work_info_batch.ref.data_info_groups{group_idx};    
-            init_dzdx=group_run_info.init_dzdx;
-            
-            last_layer_output_info.dzdx=init_dzdx;
-            last_layer_output_info.bp_finished=true;
-            data_info.ref.output_info_layers{end}=last_layer_output_info;
-                        
-            do_backward_one_group( net_config, work_info_batch, group_idx);
-            new_first_layer_output_info_bp=data_info.ref.output_info_layers{1};
-                           
-            
-            if isempty(first_layer_output_info_bp)
-                first_layer_output_info_bp=new_first_layer_output_info_bp;
-            else
-                first_layer_output_info_bp=group_info.indepgroup_merge_backward_fn(...
-                    group_run_info, first_layer_output_info_bp, new_first_layer_output_info_bp);
-            end
-                                                
-            clear new_first_layer_output_info_bp
-        end
-        
-                
-        data_info.ref.output_info_layers{layer_num}=last_layer_output_info;
-                
-        if work_info_batch.ref.run_backward
-            data_info.ref.output_info_layers{1}=first_layer_output_info_bp;
-        end
-                
-    end
-    
-    
-    
-    
-    if ~isempty(group_info.indepgroup_finish_fn)
-        group_info.indepgroup_finish_fn(work_info_batch, group_info, group_run_info);
-    end
-    
-    
-    
-
-
-end
-    
-    
-
-
-
-
 
 
 function do_forward_group_child_chain( work_info_batch, data_info, group_info)
 
-        net_run_config=work_info_batch.ref.net_run_config;
+        
         net_config=work_info_batch.ref.net_config;
 
         child_group_idxes=group_info.child_group_idxes;
@@ -221,7 +117,7 @@ function do_forward_group_child_chain( work_info_batch, data_info, group_info)
             child_group_idx=child_group_idxes(g_idx);
             
             [input_info, need_bp]=do_forward_one_child( net_config, ...
-                work_info_batch, child_group_idx, input_info, net_run_config);
+                work_info_batch, child_group_idx, input_info);
             
             if ~check_valid_net_output(input_info)
                 break;
@@ -239,11 +135,8 @@ end
 
 
 function do_forward_group_child_parallel( work_info_batch, data_info, group_info)
-
-    net_run_config=work_info_batch.ref.net_run_config;
+   
     net_config=work_info_batch.ref.net_config;
-    
-
 
     child_group_idxes=group_info.child_group_idxes;
     child_num=length(child_group_idxes);
@@ -285,8 +178,8 @@ function do_forward_group_child_parallel( work_info_batch, data_info, group_info
         
         child_group_idx=child_group_idxes(g_idx);
         
-        [child_output_info, child_need_bp]=do_forward_one_child( net_config, ...
-            work_info_batch, child_group_idx, child_input_info, net_run_config);
+        [child_output_info, child_need_bp]=do_forward_one_child(net_config, ...
+            work_info_batch, child_group_idx, child_input_info);
         output_child_groups{g_idx}=child_output_info;
         
         need_bp_flags(g_idx)=child_need_bp;
@@ -308,9 +201,6 @@ function do_forward_group_child_parallel( work_info_batch, data_info, group_info
     data_info.ref.need_bp_child_groups=need_bp_flags;
     
 end
-
-
-
 
 
 
@@ -416,15 +306,13 @@ end
 
 
 
-function [output_info, child_need_bp]=do_forward_one_child( net_config,...
-    work_info_batch, child_group_idx, input_info, net_run_config)
-
+function [output_info, child_need_bp]=do_forward_one_child(net_config,...
+    work_info_batch, child_group_idx, input_info)
 
     child_data_info=init_one_data_info_from_cache(child_group_idx, work_info_batch);
-
     child_data_info.ref.output_info_layers{1}=input_info;
 
-    do_run_one_group( net_config, work_info_batch, child_group_idx, 'forward');
+    do_run_one_group(net_config, work_info_batch, child_group_idx, 'forward');
     output_info=child_data_info.ref.output_info_layers{end};
         
     child_data_info.ref.output_info_layers{end}=[];
@@ -558,8 +446,6 @@ function do_backward_group_child_chain(net_config,work_info_batch, data_info, gr
         if isempty(start_g_idx)
             start_g_idx=child_num;
         end
-
-                
 
         init_output_info=data_info.ref.output_info_layers{end};
         
@@ -728,7 +614,7 @@ function first_output_info=do_backward_child_group( ...
     end
    
     child_data_info.ref.output_info_layers{end}=init_output_info;
-        do_run_one_group( net_config, work_info_batch, child_group_idx, 'backward');
+        do_run_one_group(net_config, work_info_batch, child_group_idx, 'backward');
     
     first_output_info=child_data_info.ref.output_info_layers{1};
     if isempty(first_output_info)

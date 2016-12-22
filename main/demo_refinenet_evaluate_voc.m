@@ -35,20 +35,9 @@ run_config.input_img_short_edge_min=450;
 run_config.input_img_short_edge_max=800;
 
 
-run_config.trained_model_path='../model_trained/voc2012/refinenet_res100';
-
-% the trained model should match the setting in gen_net_opts_fn and gen_network_fn
-run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
-run_config.gen_network_fn=@gen_network_main_evaonly_model_type1;
-
-
 % set the input image scales, useful for multi-scale evaluation
 % e.g. using multiple scale settings (1.0 0.8 0.6) and average the resulting score maps.
 run_config.input_img_scale=1;
-
-
-run_config.run_evaonly=true;
-
 
 
 ds_config.use_dummy_gt=false;
@@ -91,30 +80,52 @@ ds_info=gen_dataset_info(ds_config);
 my_diary_flush();
 
 
-
-
 fprintf('\n\n\n=====================================================================\n');
 disp('run network');
 
 
+% do evaluation only
+run_config.run_evaonly=true;
 
-run_config.learning_rate=0;
-run_config.cache_data_mem=false;
-run_config.epoch_run_max_task_one_class=0;
-run_config.crop_box_size=0;
+% load a trained model:
+run_config.trained_model_path='../model_trained/refinenet_res101_voc2012.mat';
 
 
-run_config.net_init_model_path=run_config.trained_model_path;
-train_opts=run_config.gen_net_opts_fn(run_config, ds_info.class_info);
-net_config=run_config.gen_network_fn(train_opts);
 
-my_net_init_from_existed(run_config, net_config);
+% settings for training:
+
+% run_config.learning_rate=5e-4;;
+
+% turn on this option to cache all data into memory, if it's possible
+% run_config.cache_data_mem=true;
+% run_config.cache_data_mem=false;
+
+% random crop training:
+% run_config.crop_box_size=400;
+
+% for cityscape, using a larger crop:
+% run_config.crop_box_size=600;
+
+% evaluate step: do evaluation every 10 epochs, can be set to 5:
+% run_config.eva_run_step=10;
+% run_config.snapshot_step=1;
+
+% choose ImageNet pre-trained resnet:
+% run_config.init_resnet_layer_num=50;
+% run_config.init_resnet_layer_num=101;
+% run_config.init_resnet_layer_num=152;
+
+% generate network
+% run_config.gen_network_fn=@gen_network_main;
+
+run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
 
 
 % uncomment the following for debug:
 % select a subset for evaluation.
-% ds_info.train_idxes=ds_info.train_idxes(1:10);
 % ds_info.test_idxes=ds_info.test_idxes(1:10);
+
+train_opts=run_config.gen_net_opts_fn(run_config, ds_info.class_info);
 
 
 disp('train_opts:');
@@ -123,20 +134,14 @@ disp(train_opts);
 disp('train_opts.eva_param:');
 disp(train_opts.eva_param);
 
-disp('net_config:');
-disp(net_config.ref);
-
 my_diary_flush();
-
 
 imdb=my_gen_imdb(train_opts, ds_info);
 
 data_norm_info=[];
-data_norm_info.use_constant_mean=true;
-data_norm_info.constant_mean=128;
+data_norm_info.image_mean=128;
 
 imdb.ref.data_norm_info=data_norm_info;
-
 
 if run_config.use_gpu
 	gpu_num=gpuDeviceCount;
@@ -147,7 +152,11 @@ if run_config.use_gpu
 	end
 end
 
-my_net_tool(net_config, imdb, train_opts);
+[net_config, net_exp_info]=prepare_running_model(train_opts);
+
+% net_config can be changed here before running the network
+
+my_net_tool(train_opts, imdb, net_config, net_exp_info);
 
 
 fprintf('\n\n--------------------------------------------------\n\n');
@@ -160,6 +169,5 @@ diary off
 
 
 end
-
 
 

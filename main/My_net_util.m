@@ -27,28 +27,14 @@ group_info.skip_forward=false;
 group_info.skip_backward=false;
 group_info.name=group_name;
 
-group_info.force_non_group_data=false;
-
-group_info.independent_group=false;
-group_info.indepgroup_run_config_fn=[];
-group_info.indepgroup_merge_backward_fn=[];
-group_info.indepgroup_finish_fn=[];
-group_info.indepgroup_init_fn=[];
-
-
 group_info.use_dagnn=false;
-
-group_info.extra_output_config=[];
-
-
-
 
 
 end
 
 
 
-function net_info=gen_net_info_basic(train_opts)
+function net_info=gen_net_info_basic()
 
 
 net_info=[];
@@ -56,17 +42,13 @@ net_info.bp_start_layer=1;
 net_info.do_bp=true;
 net_info.bp_start_epoch=1;
 
-net_info.use_gpu=train_opts.use_gpu;
 net_info.net_stay_on_gpu=true;
 net_info.data_stay_on_gpu=true;
 
+net_info.lr_multiplier=1;
+net_info.current_lr=0;
 
-learning_rates=train_opts.learning_rate;
-net_info.lr_steps=learning_rates;
-net_info.current_lr=learning_rates(1);
-
-net_info.weightDecay= 0.0005;
-net_info.momentum = 0.9;
+net_info.tmp_data=[];
 
 net_info.layers=[];
 net_info.name='';
@@ -86,9 +68,8 @@ function fix_padding_resnet(dag_net)
     for l_idx=1:length(dag_net.layers)
         l=dag_net.layers(l_idx);
         block=l.block;
-%         isconv=~isempty(strfind(l.name, 'conv'));
-%         ispool=~isempty(strfind(l.name, 'pool'));
-%         if  isconv||ispool 
+       
+
         if isprop(block, 'pad')
                 if isprop(block, 'poolSize')
                     filter_size=block.poolSize;
@@ -122,77 +103,21 @@ end
 
 function fix_batch_norm_resnet(dag_net)
 
-    %TODO: if make the moment params fixed, then need to change the forward
-    %and backward of the batch_norm layers, to remove the gradients from
-    %the moments, and used specified moments, instead of do the calculation
-    %fo the currrent batch!!!!!!!
-
-%     error('TODO');
-
     for l_idx=1:length(dag_net.layers)
         l=dag_net.layers(l_idx);
         block=l.block;
 
         if isa(block, 'dagnn.BatchNorm')
 
-               tmp_param_idx=l.paramIndexes(end);
-               dag_net.params(tmp_param_idx).trainMethod='fixed';
-               tmp_name=dag_net.params(tmp_param_idx).name;
-               assert(~isempty(strfind(tmp_name, '_moments')));
+           tmp_param_idx=l.paramIndexes(end);
+           dag_net.params(tmp_param_idx).trainMethod='fixed';
+           tmp_name=dag_net.params(tmp_param_idx).name;
+           assert(~isempty(strfind(tmp_name, '_moments')));
 
-%                  for p_idx=1:length(l.paramIndexes)
-%                      tmp_param_idx=l.paramIndexes(p_idx);
-%                      dag_net.params(tmp_param_idx).trainMethod='fixed';
-%                  end
-
-               % cannot work!!!
-%                new_block=dagnn.BatchNorm_given_moments();
-%                new_block.do_init(block);
-%                l.block=new_block;
-%                dag_net.layers(l_idx)=l;
         end
     end
 
-
 end
-
-
-
-
-
-
-function fix_crop_resnet(dag_net)
-
-error('not used');
-
-    for l_idx=1:length(dag_net.layers)
-        l=dag_net.layers(l_idx);
-        block=l.block;
-        if isprop(block, 'crop')
-                assert(isa(block, 'dagnn.ConvTranspose'))
-                filter_size=block.size(1:2);
-                                
-                pad_size1=round((filter_size(1)-1)/2);
-                pad_size2=round((filter_size(2)-1)/2);
-                assert(pad_size2==pad_size1);
-                
-                pad_vs=unique(block.crop);
-                if numel(pad_vs)>1
-                    %To verify the order...
-                    block.crop=[pad_size1, pad_size2, pad_size1, pad_size2];
-                    fprintf('fix crop for layer and block:\n');
-                    disp(l)
-                    disp(block);
-                else
-                    block.crop=pad_size1;
-                end
-        end
-    end
-end
-
-
-
-
 
 
 
@@ -252,22 +177,22 @@ end
 
 
 
-function [outputs, layer_name]=add_dim_reduce_layer(dag_net, input_var_name, input_dim, target_dim, init_lr)
+function [outputs, layer_name]=add_dim_reduce_layer(dag_net, input_var_name, input_dim, target_dim)
 
 
 layer_name=[input_var_name '_dimred'];
-[outputs, layer_name]=My_net_util.add_dim_reduce_layer_named(dag_net, input_var_name, input_dim, target_dim, init_lr, layer_name);
+[outputs, layer_name]=My_net_util.add_dim_reduce_layer_named(dag_net, input_var_name, input_dim, target_dim, layer_name);
 
 end
 
 
 
-function [outputs, layer_name]=add_dim_reduce_layer_named(dag_net, input_var_name, input_dim, target_dim, init_lr, layer_name)
+function [outputs, layer_name]=add_dim_reduce_layer_named(dag_net, input_var_name, input_dim, target_dim, layer_name)
 
 inputs={input_var_name};
 outputs={[layer_name '_varout']};
 filter_size=[3 3 input_dim, target_dim];
-My_net_util.add_conv_layer_dagnn(dag_net, inputs, outputs, false, filter_size, layer_name, init_lr, false)
+My_net_util.add_conv_layer_dagnn(dag_net, inputs, outputs, false, filter_size, layer_name, false)
 
 end
 
@@ -275,7 +200,7 @@ end
 
 
 
-function add_conv_layer_dagnn(dag_net, inputs, outputs, conv_t_flag, filter_size, name, init_lr, hasBias)
+function add_conv_layer_dagnn(dag_net, inputs, outputs, conv_t_flag, filter_size, name, hasBias)
 
 
     
@@ -297,7 +222,7 @@ function add_conv_layer_dagnn(dag_net, inputs, outputs, conv_t_flag, filter_size
       sz = size(filters) ;
       params(1).name = [name '_filter'] ;
       params(1).value = filters ;
-      params(1).learningRate = init_lr;
+      params(1).learningRate = 1;
       params(1).weightDecay = 1;
       if hasBias
       
@@ -310,7 +235,7 @@ function add_conv_layer_dagnn(dag_net, inputs, outputs, conv_t_flag, filter_size
         
         params(2).name = [name '_bias'];
         params(2).value = biases ;
-        params(2).learningRate = init_lr ;
+        params(2).learningRate = 1 ;
         params(2).weightDecay = 1;
         
       end
@@ -393,16 +318,14 @@ function [layer_gen_info, conv_layer_names, joint_layer_names]=...
     one_output_dim=layer_gen_info.one_output_dim;
     one_outputs=layer_gen_info.one_outputs;
     block_output_dim=output_dim;        
-    init_lr=layer_gen_info.init_lr;
-    
+        
     assert(block_output_dim==one_output_dim);
         
     conv_layer_names=cell(conv_num, 1);                
     joint_layer_names=cell(conv_num, 1);
     
     for one_conv_idx=1:conv_num
-        
-        % here is a identity mapping block
+                
         
         name_prefix=sprintf([layer_name_prefix '_b%d'], one_conv_idx);
         
@@ -417,7 +340,7 @@ function [layer_gen_info, conv_layer_names, joint_layer_names]=...
         one_inputs=one_outputs;
         filter_name=[name_prefix '_conv'];
         one_outputs={[filter_name '_outvar']};
-        My_net_util.add_conv_layer_dagnn(dag_net, one_inputs, one_outputs, false, filter_size, filter_name, init_lr, true);
+        My_net_util.add_conv_layer_dagnn(dag_net, one_inputs, one_outputs, false, filter_size, filter_name, true);
         
         conv_layer_names{one_conv_idx}=filter_name;
         
@@ -427,7 +350,7 @@ function [layer_gen_info, conv_layer_names, joint_layer_names]=...
 
         feat_dim_before=one_output_dim;
         feat_dim_after=one_output_dim;
-        one_outputs=My_net_util.add_dim_reduce_layer(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after, init_lr);
+        one_outputs=My_net_util.add_dim_reduce_layer(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after);
         
                 
         joint_layer_name=[name_prefix '_joint'];
@@ -444,12 +367,7 @@ function [layer_gen_info, conv_layer_names, joint_layer_names]=...
     
         joint_layer_names{one_conv_idx}=joint_layer_name;
         
-%         layer_gen_info.one_output_dim=one_output_dim;
-%         layer_gen_info.one_outputs=one_outputs;
-%         layer_gen_info=add_contextpool_block(train_opts, dag_net, layer_gen_info, joint_layer_name);
-%         one_output_dim=layer_gen_info.one_output_dim;
-%         one_outputs=layer_gen_info.one_outputs;
-        
+       
     end
         
         

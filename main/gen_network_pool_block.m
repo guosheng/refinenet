@@ -16,7 +16,7 @@ end
 
 
 
-function [outputs, one_output_dim]=add_joint_layer_dagnn(dag_net, inputs, name, use_concat, joint_input_dims, init_lr)
+function [outputs, one_output_dim]=add_joint_layer_dagnn(dag_net, inputs, name, use_concat, joint_input_dims)
 
 
 outputs={[name '_varout']};
@@ -38,9 +38,7 @@ dag_net.addLayer(...
 
 
 if use_concat
-    
-    assert(~isempty(init_lr));
-    
+            
     one_output_dim=sum(joint_input_dims);
     
     feat_dim_before=one_output_dim;
@@ -49,7 +47,7 @@ if use_concat
     assert(all(joint_input_dims==joint_input_dims(1)));
     feat_dim_after=joint_input_dims(1);
 
-    outputs=My_net_util.add_dim_reduce_layer(dag_net, outputs{1}, feat_dim_before, feat_dim_after, init_lr);
+    outputs=My_net_util.add_dim_reduce_layer(dag_net, outputs{1}, feat_dim_before, feat_dim_after);
 
     one_output_dim=feat_dim_after;
     
@@ -81,8 +79,7 @@ function layer_gen_info=do_gen_block(refine_config, dag_net, layer_gen_info, lay
     assert(pool_num>=1);
 
     one_output_dim=layer_gen_info.one_output_dim;
-    init_lr=layer_gen_info.init_lr;
-    
+        
     one_outputs=layer_gen_info.one_outputs;
     pool_outputs=one_outputs;
        
@@ -111,7 +108,7 @@ function layer_gen_info=do_gen_block(refine_config, dag_net, layer_gen_info, lay
         
         feat_dim_before=one_output_dim;
         feat_dim_after=one_output_dim;
-        one_outputs=My_net_util.add_dim_reduce_layer(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after, init_lr);
+        one_outputs=My_net_util.add_dim_reduce_layer(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after);
         
         pool_outputs=cat(2, pool_outputs, one_outputs);
         
@@ -124,7 +121,7 @@ function layer_gen_info=do_gen_block(refine_config, dag_net, layer_gen_info, lay
         joint_layer_name=[layer_name_prefix '_pool_joint'];
         one_inputs=pool_outputs;
         joint_input_dims=repmat(one_output_dim, [1, pool_num+1]);
-        [one_outputs, joint_output_dim]=add_joint_layer_dagnn(dag_net, one_inputs, joint_layer_name, use_concat, joint_input_dims, []);
+        [one_outputs, joint_output_dim]=add_joint_layer_dagnn(dag_net, one_inputs, joint_layer_name, use_concat, joint_input_dims);
 
         
     layer_gen_info.one_output_dim=joint_output_dim;
@@ -153,8 +150,7 @@ function layer_gen_info=do_gen_block_convbeforepool(refine_config, dag_net, laye
     assert(pool_num>=1);
 
     one_output_dim=layer_gen_info.one_output_dim;
-    init_lr=layer_gen_info.init_lr;
-    
+        
     one_outputs=layer_gen_info.one_outputs;
     pool_outputs=one_outputs;
 
@@ -167,7 +163,7 @@ function layer_gen_info=do_gen_block_convbeforepool(refine_config, dag_net, laye
         feat_dim_after=one_output_dim;
 
         dim_adapt_name=sprintf([one_outputs{1} '_pb%d'], p_idx);
-        one_outputs=My_net_util.add_dim_reduce_layer_named(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after, init_lr, dim_adapt_name);
+        one_outputs=My_net_util.add_dim_reduce_layer_named(dag_net, one_outputs{1}, feat_dim_before, feat_dim_after, dim_adapt_name);
 
         
         block = dagnn.Pooling() ;
@@ -201,7 +197,7 @@ function layer_gen_info=do_gen_block_convbeforepool(refine_config, dag_net, laye
         joint_layer_name=[layer_name_prefix '_pool_joint'];
         one_inputs=pool_outputs;
         joint_input_dims=repmat(one_output_dim, [1, pool_num+1]);
-        [one_outputs, joint_output_dim]=add_joint_layer_dagnn(dag_net, one_inputs, joint_layer_name, use_concat, joint_input_dims, []);
+        [one_outputs, joint_output_dim]=add_joint_layer_dagnn(dag_net, one_inputs, joint_layer_name, use_concat, joint_input_dims);
 
       
         

@@ -21,7 +21,8 @@ function cnn_batch_info_disp(train_opts, work_info_batch)
         feat_size_str_inputpath=cat(2, feat_size_str_inputpath, one_feat_size_str_inputpath);
     end
     
-    img_scales_str=my_gen_array_str(train_opts.net_input_img_scales, '%.1f');
+    net_input_img_scales=work_info_batch.ref.net_config.ref.net_input_img_scales;
+    img_scales_str=my_gen_array_str(net_input_img_scales, '%.1f');
     net_input_str=batch_ds_info.net_input_str;
         
     predict_map_size_str=my_gen_array_str(work_info_batch.ref.predict_map_size);
@@ -50,10 +51,13 @@ function cnn_batch_info_disp(train_opts, work_info_batch)
     
     refine_config=train_opts.refine_config;
 	pool_sizes_str='[]';
-    if refine_config.use_chained_pool
-		pool_sizes_str=my_gen_array_str(refine_config.chained_pool_size);
+    pool_num=0;
+    if ~isempty(refine_config)
+        if refine_config.use_chained_pool
+            pool_sizes_str=my_gen_array_str(refine_config.chained_pool_size);
+        end
+        pool_num=refine_config.chained_pool_num;
     end
-    pool_num=refine_config.chained_pool_num;
     
         
     class_info=train_opts.eva_param.class_info;

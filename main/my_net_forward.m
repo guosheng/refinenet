@@ -5,7 +5,7 @@
 function extra_data_info=my_net_forward(net_info, work_info_batch, data_info, net_run_config, extra_output_layer_idxes)
 
            
-    gpu_mode=net_info.ref.use_gpu;
+    gpu_mode=net_run_config.use_gpu;
     if gpu_mode
       if ~net_info.ref.net_on_gpu
            my_move_net(net_info, 'gpu') ;

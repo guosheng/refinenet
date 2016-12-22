@@ -10,6 +10,8 @@ task_subidx=work_info_batch.ref.task_subidxes;
 % only support using one image for one batch...
 batch_img_num=length(task_subidx);
 assert(batch_img_num==1);
+assert(work_info_batch.ref.batch_task_num==1);
+
 
 batch_data=get_batch_data(opts, imdb, task_idx);
 img_size_input=size(batch_data.img_data);
@@ -35,8 +37,9 @@ else
     batch_data.crop_info=[];
 end
 
+net_input_img_scales=net_config.ref.net_input_img_scales;
 
-[net_input_info, net_input_str]=gen_net_input_info(opts, imdb, batch_data);
+[net_input_info, net_input_str]=gen_net_input_info(opts, imdb, batch_data, net_input_img_scales);
 img_size=size(batch_data.img_data);
 img_size=img_size(1:2);
 
@@ -63,20 +66,18 @@ end
 function img_data=pre_process_img_net_input(imdb, img_data)
 
     data_norm_info=imdb.ref.data_norm_info;
-    assert(data_norm_info.use_constant_mean);
-       
+           
     img_data=single(img_data);
-    img_data=img_data-data_norm_info.constant_mean;
+    img_data=img_data-data_norm_info.image_mean;
 
 end
 
 
 
 
-function [net_input_info,net_input_str]=gen_net_input_info(opts, imdb, batch_data)
+function [net_input_info,net_input_str]=gen_net_input_info(opts, imdb, batch_data, net_input_img_scales)
 
 
-net_input_img_scales=opts.net_input_img_scales;
 feat_scale_num=length(net_input_img_scales);
 
 org_img_size=size(batch_data.img_data);
@@ -210,14 +211,13 @@ function batch_data=do_load_and_cache_batch_data(train_opts, imdb, img_idx)
         assert(todo_scale<=1);
     end
     todo_scale=todo_scale*train_opts.input_img_scale;
-    
             
     if todo_scale~=1
         img_data_batch=imresize(img_data_batch, todo_scale);
 %         img_size=[size(img_data_batch, 1), size(img_data_batch, 2)];
     end
 
-    
+   
     batch_data=[];
     batch_data.img_data=img_data_batch;
     batch_data.label_data=one_mask;

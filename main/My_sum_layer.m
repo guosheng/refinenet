@@ -72,12 +72,17 @@ classdef My_sum_layer < dagnn.ElementWise
     end
 
     function outputSizes = getOutputSizes(obj, inputSizes)
+        
       outputSizes{1} = inputSizes{1} ;
+      
       for k = 2:numel(inputSizes)
         if all(~isnan(inputSizes{k})) && all(~isnan(outputSizes{1}))
-          if ~isequal(inputSizes{k}, outputSizes{1})
-            warning('Sum layer: the dimensions of the input variables is not the same.') ;
-          end
+            
+            map_size1=inputSizes{k}(1:2);
+            map_size2=outputSizes{1}(1:2);
+          
+            outputSizes{1}(1:2)=max(map_size2, map_size1);
+            outputSizes{1}(3)=min(inputSizes{k}(3), outputSizes{1}(3));
         end
       end
     end

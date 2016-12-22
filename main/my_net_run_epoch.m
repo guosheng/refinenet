@@ -5,6 +5,8 @@ function my_net_run_epoch(opts, imdb, work_info, net_config)
 
 epoch_time = tic ;
 
+net_run_opts=opts.net_run_opts;
+
 run_type=work_info.ref.run_type;
 
 epoch=work_info.ref.current_epoch;
@@ -20,7 +22,7 @@ make_ref_obj(work_info_epoch);
 
 
 epoch_config_time=tic;
-net_config.ref.epoch_run_config_fn(opts, imdb, work_info, ...
+net_run_opts.epoch_run_config_fn(opts, imdb, work_info, ...
         net_config, work_info_epoch);
 epoch_config_time=toc(epoch_config_time);
 work_info_epoch.ref.epoch_config_time=epoch_config_time;
@@ -31,7 +33,7 @@ do_run_batch(opts, imdb, work_info, net_config, work_info_epoch);
 
 valid_batch_count=work_info_epoch.ref.valid_batch_count;
 if valid_batch_count>0
-    work_info_epoch.ref.epoch_evaluate_fn(work_info, opts, imdb, net_config, work_info_epoch);
+    net_run_opts.epoch_evaluate_fn(work_info, opts, imdb, net_config, work_info_epoch);
 end
 
 eva_result=work_info_epoch.ref.eva_result;
@@ -57,8 +59,8 @@ if work_info.ref.run_trn
 end
 
 
-if ~isempty(work_info_epoch.ref.info_disp_fn)
-    work_info_epoch.ref.info_disp_fn(opts, imdb, work_info, net_config, work_info_epoch);
+if ~isempty(net_run_opts.epoch_info_disp_fn)
+    net_run_opts.epoch_info_disp_fn(opts, imdb, work_info, net_config, work_info_epoch);
 end
 
 
@@ -79,8 +81,10 @@ end
 
 function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
 
-  if ~isempty(work_info_epoch.ref.init_fn)
-      work_info_epoch.ref.init_fn(opts, imdb, work_info, ...
+  net_run_opts=opts.net_run_opts;
+
+  if ~isempty(net_run_opts.epoch_init_fn)
+      net_run_opts.epoch_init_fn(opts, imdb, work_info, ...
             net_config, work_info_epoch);
   end
    
@@ -90,7 +94,7 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
   batch_idx=0;
   valid_batch_count=0;
         
-  batch_run_config_fn=net_config.ref.batch_run_config_fn;
+  batch_run_config_fn=net_run_opts.batch_run_config_fn;
   batch_disp_thresh=0;
  
 
@@ -122,13 +126,13 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
         break;
     end
     
-    if ~isempty(work_info_batch.ref.init_fn)
-        work_info_batch.ref.init_fn(opts, imdb, work_info, ...
+    if ~isempty(net_run_opts.batch_init_fn)
+        net_run_opts.batch_init_fn(opts, imdb, work_info, ...
             net_config, work_info_epoch, work_info_batch);
     end
     
     
-    task_num_batch=work_info_batch.ref.task_num;
+    task_num_batch=work_info_batch.ref.batch_task_num;
        
     
     
@@ -140,7 +144,7 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
     
     work_info_batch.ref.run_backward=false;
     if work_info.ref.run_trn
-        if epoch>=net_config.ref.bp_start_epoch
+        if epoch>=net_run_opts.bp_start_epoch
             net_run_config.do_bp=true;
             work_info_batch.ref.run_backward=true;            
         end
@@ -161,8 +165,8 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
        
       
       
-    if ~isempty(work_info_batch.ref.finish_fn)  
-        work_info_batch.ref.finish_fn(opts, imdb, work_info, ...
+    if ~isempty(net_run_opts.batch_finish_fn)  
+        net_run_opts.batch_finish_fn(opts, imdb, work_info, ...
             net_config, work_info_epoch, work_info_batch);
     end
     
@@ -172,8 +176,8 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
     
         
     eva_time=tic;
-    if ~isempty(work_info_batch.ref.batch_evaluate_fn)
-        work_info_batch.ref.batch_evaluate_fn(...
+    if ~isempty(net_run_opts.batch_evaluate_fn)
+        net_run_opts.batch_evaluate_fn(...
             opts, imdb, net_config, work_info, work_info_epoch, work_info_batch);
     end
     eva_time=toc(eva_time);
@@ -236,8 +240,8 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
             fprintf('--batch_info, group:%s, learn_rate:%s\n', group_idxes_str, lr_str) ;
         end
         
-        if ~isempty(work_info_batch.ref.info_disp_fn)
-            work_info_batch.ref.info_disp_fn(opts, work_info_batch);
+        if ~isempty(net_run_opts.batch_info_disp_fn)
+            net_run_opts.batch_info_disp_fn(opts, work_info_batch);
         end
         
     end
@@ -251,8 +255,9 @@ function do_run_batch(opts, imdb, work_info, net_config, work_info_epoch)
   work_info_epoch.ref.task_count=task_count;
   work_info_epoch.ref.valid_batch_count=valid_batch_count;
   
-  if ~isempty(work_info_epoch.ref.finish_fn)
-      work_info_epoch.ref.finish_fn(opts, imdb, work_info, ...
+  
+  if ~isempty(net_run_opts.epoch_finish_fn)
+      net_run_opts.epoch_finish_fn(opts, imdb, work_info, ...
             net_config, work_info_epoch);
   end
   

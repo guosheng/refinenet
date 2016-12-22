@@ -4,15 +4,9 @@ function output_info=cnn_layer_dagnn_wrapper_forward(input_info, layer, work_inf
 
    
 run_trn=work_info_batch.ref.run_trn;
-% train_opts=work_info_batch.ref.train_opts;
-
-
-
 group_info=get_current_work_group_idx(work_info_batch);
 
-
 net=group_info.dag_net;
-
 
 if input_info.is_group_data
     input_var_names=layer.input_var_names;
@@ -36,9 +30,6 @@ do_bp_run=group_info.net_info.ref.do_bp && run_trn;
 
 if do_bp_run
     
-%     if layer.do_accumulate_gradient
-%         net.accumulateParamDers=true;
-%     end
     net.mode = 'normal' ;
     net.do_forward_trn(input_data);
     
@@ -88,7 +79,13 @@ output_info=my_init_input_info(output_info);
 
 % do the print here, generate the network graph :
 
-% net.print('Format', 'dot');
+% for resnet:
+% input_vars=net.getInputs;
+% net.print({input_vars{1}, [400 400 3]}, 'Format', 'dot');
+
+% for cascaded refinenets
+% input_vars=net.getInputs;
+% net.print({input_vars{1}, [13 13 2048], input_vars{2}, [25 25 1024], input_vars{3}, [50 50 512], input_vars{4}, [100 100 256]}, 'Format', 'dot');
 
 
 end

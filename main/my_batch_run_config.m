@@ -53,7 +53,7 @@ function my_batch_run_config(opts, imdb, work_info, net_config, work_info_epoch,
         task_idxes_org=work_info.ref.task_info.task_idxes(task_subidxes_batch);
         work_info_batch.ref.task_idxes=task_idxes_org;
         work_info_batch.ref.task_subidxes=task_subidxes_batch;
-        work_info_batch.ref.task_num=batch_task_num;
+        work_info_batch.ref.batch_task_num=batch_task_num;
                                
         
         ds_info= opts.get_batch_ds_info_fn(opts, imdb, work_info, ...
@@ -87,13 +87,27 @@ work_info_batch.ref.run_eva=work_info.ref.run_eva;
 
 work_info_batch.ref.epoch=work_info_epoch.ref.epoch;
 work_info_batch.ref.total_iter_num=work_info.ref.total_iter_num;
-work_info_batch.ref.init_fn=net_config.ref.batch_init_fn;
-work_info_batch.ref.finish_fn=net_config.ref.batch_finish_fn;
-work_info_batch.ref.batch_evaluate_fn=net_config.ref.batch_evaluate_fn;
-work_info_batch.ref.info_disp_fn=net_config.ref.batch_info_disp_fn;
 
+work_info_batch.ref.net_run_verbose=opts.net_run_verbose;
+
+if work_info.ref.run_trn
+    work_info_batch.ref.gen_optimizer_param_fn=@my_gen_optimizer_param;
+end
 
 end
+
+
+
+function optimizer_param=my_gen_optimizer_param(work_info_batch, net_info)
+
+% this will be called in each batch...
+
+optimizer_param=net_info.ref.tmp_data.optimizer_param;
+
+end
+
+
+
 
 
 

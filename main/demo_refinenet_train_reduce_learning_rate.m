@@ -1,11 +1,9 @@
 
-
 % Author: Guosheng Lin (guosheng.lin@gmail.com)
 
 % This is an example of resume training with lower learning rate.
 
-
-function demo_refinenet_train_reduce_learning_rate()
+function demo_refinenet_train_reduce_learn_rate()
 
 
 rng('shuffle');
@@ -22,39 +20,29 @@ run_config.use_gpu=true;
 % run_config.use_gpu=false;
 run_config.gpu_idx=1;
 
-
-% use current time string as model name:
+% use a random model name:
 % model_name=['model_' datestr(now, 'YYYYmmDDHHMMSS')];
 
-% specify model_name for training, if the cached files existed, then resume training
-% model_name='model_20161219094311_model1';
+% or specify a model_name for training, if the cached snapshot files existed, it will resume training
+% model_name='model_20161219094311_example';
 
 % update the model name when reducing learning rate for training, e.g.,
-% pick the mdoel at epoch 300 for further training.
-model_name='model_20161219094311_example_model_epoch300_reduce_learn_rate';
+model_name='model_20161219094311_example_epoch70_low_learn_rate';
+
 
 
 ds_name='voc2012_trainval';
 gen_ds_info_fn=@my_gen_ds_info_voc;
-run_config.crop_box_size=400;
 
 
-% ds_name='cityscapes';
-% gen_ds_info_fn=@my_gen_ds_info_cityscapes;
-% run_config.crop_box_size=600;
-
-
-run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
-run_config.gen_network_fn=@gen_network_main;
-
-
+% control the size of input images
 run_config.input_img_short_edge_min=450;
 run_config.input_img_short_edge_max=1100;
+
+
 run_config.input_img_scale=1;
 
 
-
-run_config.run_evaonly=false;
 ds_config.use_dummy_gt=false;
 run_config.use_dummy_gt=ds_config.use_dummy_gt;
 ds_config.use_custom_data=false;
@@ -63,7 +51,6 @@ ds_config.use_custom_data=false;
 ds_config.ds_name=ds_name;
 ds_config.gen_ds_info_fn=gen_ds_info_fn;
 ds_config.ds_info_cache_dir=fullfile('../datasets', ds_name);
-
 
 
 run_config.root_cache_dir=fullfile('../cache_data', ds_name, model_name);
@@ -100,43 +87,60 @@ fprintf('\n\n\n=================================================================
 disp('run network');
 
 
+run_config.run_evaonly=false;
 
-% init from a cached model
-% e.g., can be used for resuming network training with a lower learning rate by
-% initilizing from a cached model.
+
+% settings for training:
 
 % run_config.trained_model_path=[];
 % run_config.learning_rate=5e-4;
 
-% here's an example for loading a cached model, e.g., the cached model of epoch 300, 
-% and using a lower learning to continue the training.
-run_config.trained_model_path='../cache_data/voc2012_trainval/model_20161219094311_example_model/model_cache/epoch_300';
+
+% init from a cached model
+% e.g., can be used for resuming network training with a lower learning rate by
+% initilizing from a cached model.
+% the following is an example for loading a cached model and using a lower learning
+% to continue the training
+
+run_config.trained_model_path='../cache_data/voc2012_trainval/model_20161219094311_example/model_cache/epoch_70';
 run_config.learning_rate=5e-5;
 
 
-
-run_config.cache_data_mem=false;
-
 % turn on this option to cache all data into memory, if it's possible
 % run_config.cache_data_mem=true;
+run_config.cache_data_mem=false;
 
-run_config.epoch_run_max_task_one_class=100;
+% random crop training:
+run_config.crop_box_size=400;
 
+% for cityscape, using a larger crop:
+% run_config.crop_box_size=600;
 
-run_config.net_init_model_path=run_config.trained_model_path;
-train_opts=run_config.gen_net_opts_fn(run_config, ds_info.class_info);
-net_config=run_config.gen_network_fn(train_opts);
+% evaluate step: do evaluation every 10 epochs, can be set to 5:
+run_config.eva_run_step=10;
+run_config.snapshot_step=1;
 
-my_net_init_from_existed(run_config, net_config);
+% choose ImageNet pre-trained resnet:
+run_config.init_resnet_layer_num=50;
+% run_config.init_resnet_layer_num=101;
+% run_config.init_resnet_layer_num=152;
 
+% generate network
+run_config.gen_network_fn=@gen_network_main;
 
+run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
 
 
 
 % uncomment the following for debug:
-% select a subset for both training and test.
-% ds_info.train_idxes=ds_info.train_idxes(1:2);
+% select a subset for both training and evaluation.
+% ds_info.train_idxes=ds_info.train_idxes(1:10);
 % ds_info.test_idxes=ds_info.train_idxes;
+% run_config.snapshot_step=10;
+
+
+train_opts=run_config.gen_net_opts_fn(run_config, ds_info.class_info);
+
 
 
 
@@ -146,20 +150,14 @@ disp(train_opts);
 disp('train_opts.eva_param:');
 disp(train_opts.eva_param);
 
-disp('net_config:');
-disp(net_config.ref);
-
 my_diary_flush();
-
 
 imdb=my_gen_imdb(train_opts, ds_info);
 
 data_norm_info=[];
-data_norm_info.use_constant_mean=true;
-data_norm_info.constant_mean=128;
+data_norm_info.image_mean=128;
 
 imdb.ref.data_norm_info=data_norm_info;
-
 
 if run_config.use_gpu
 	gpu_num=gpuDeviceCount;
@@ -170,7 +168,11 @@ if run_config.use_gpu
 	end
 end
 
-my_net_tool(net_config, imdb, train_opts);
+[net_config, net_exp_info]=prepare_running_model(train_opts);
+
+% net_config can be changed here before running the network
+
+my_net_tool(train_opts, imdb, net_config, net_exp_info);
 
 
 fprintf('\n\n--------------------------------------------------\n\n');
@@ -183,8 +185,5 @@ diary off
 
 
 end
-
-
-
 
 

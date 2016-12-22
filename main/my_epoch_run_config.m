@@ -56,19 +56,12 @@ function do_config_basic(opts, imdb, work_info, net_config, work_info_epoch)
     work_info_epoch.ref.input_task_num=input_task_num;
     
     work_info_epoch.ref.valid_task_flags=true(input_task_num, 1);
-    
-    work_info_epoch.ref.epoch_evaluate_fn=net_config.ref.epoch_evaluate_fn;
     work_info_epoch.ref.batch_size=opts.batch_size;
     
     work_info_epoch.ref.eva_result=[];
-        
-    work_info_epoch.ref.init_fn=net_config.ref.epoch_init_fn;
-    work_info_epoch.ref.finish_fn=net_config.ref.epoch_finish_fn;
-                    
     work_info_epoch.ref.done_task_num=0;
     work_info_epoch.ref.task_num=input_task_num;
-    work_info_epoch.ref.info_disp_fn=net_config.ref.epoch_info_disp_fn;
-        
+            
             
 end  
 

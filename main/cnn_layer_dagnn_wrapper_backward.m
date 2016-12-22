@@ -3,20 +3,9 @@
 
 function input_info = cnn_layer_dagnn_wrapper_backward(input_info, layer, work_info_batch, output_info)
 
-
-
 group_idx=work_info_batch.ref.net_run_current_group_idx;
-
-% the group_info maybe the linked group_info, don't use this group_idx
 group_info=get_current_work_group_idx(work_info_batch);
 net=group_info.dag_net;
-
-
-
-% input_var_name=layer.input_var_name;
-% input_data={input_var_name, input_info.x};
-
-
 
 output_num=length(layer.output_var_names);
 
@@ -33,27 +22,14 @@ else
     assert(~isempty(output_info.dzdx));
 end
 
-
-% derOutputs={layer.output_var_name, output_info.dzdx};
-
-
 net.mode = 'normal' ;
 net.do_backward_trn(derOutputs) ;
 
 
-% accumulate gradient
 work_info=work_info_batch.ref.work_info;
 state=work_info.ref.tmp_cache.dag_state_groups{group_idx};
 
-
-net_info=group_info.net_info;
-current_step=work_info_batch.ref.epoch;
-lr_steps=net_info.ref.lr_steps;
-input_lr=lr_steps(min(length(lr_steps), current_step));
-state.learningRate=input_lr;
-
-
-batchSize=1;
+batchSize=work_info_batch.ref.batch_task_num;
 state = accumulate_gradients(state, net, batchSize) ;
 work_info.ref.tmp_cache.dag_state_groups{group_idx}=state;
 
@@ -94,14 +70,11 @@ function state = accumulate_gradients(state, net, batchSize)
 % -------------------------------------------------------------------------
 
 for p=1:numel(net.params)
-
-  % accumualte gradients from multiple labs (GPUs) if needed
+ 
 
   switch net.params(p).trainMethod
 
-    case 'average' % mainly for batch normalization
-        % verify: actually this value is not considered in the training
-        % process, so accumulate this just for testing....
+    case 'average' 
       
       if isempty(net.params(p).value)
         net.params(p).value=net.params(p).der;
@@ -114,22 +87,18 @@ for p=1:numel(net.params)
       
 
     case 'gradient'
-      thisDecay = state.weightDecay * net.params(p).weightDecay ;
-      thisLR = state.learningRate * net.params(p).learningRate ;
-      
-%       disp(net.params(p))
-%       disp(thisLR)
-      
-      state.momentum{p} = state.momentum_param * state.momentum{p} ...
+        
+      optimizer_param=state.optimizer_param;
+            
+      thisDecay = optimizer_param.weightDecay * net.params(p).weightDecay ;
+      thisLR = optimizer_param.learning_rate * net.params(p).learningRate ;
+            
+      state.momentum{p} = optimizer_param.momentum * state.momentum{p} ...
         - thisDecay * net.params(p).value ...
         - (1 / batchSize) * net.params(p).der ;
         
       net.params(p).value = net.params(p).value + thisLR * state.momentum{p} ;
-
-    case 'fixed'
-        %do nothing
-%         disp('debug');
-        
+       
     case 'otherwise'
       error('Unknown training method ''%s'' for parameter ''%s''.', ...
         net.params(p).trainMethod, ...
@@ -137,6 +106,5 @@ for p=1:numel(net.params)
   end
 end
 
-
-
 end
+
