@@ -23,16 +23,11 @@ We did a major update of our code on 23 Dec 2016. If you use an older version, p
 Download the following pretrained models and put them in `./model_trained/`:
 
 * ReineNet trained on PASCAL VOC 2012 dataset for object segmentation (ResNet-101): 
-
-[refinenet_res101_voc2012.mat (OneDrive)](https://1drv.ms/u/s!AmxAc3Al6cbBa0btnxISOcd4t4M)
-
+	*[refinenet_res101_voc2012.mat (OneDrive)](https://1drv.ms/u/s!AmxAc3Al6cbBa0btnxISOcd4t4M)
 * ReineNet trained on Person-Part dataset for object parsing (ResNet-101): 
-
-refinenet_res101_person_parts.mat (OneDrive) (coming soon)
-
+	*refinenet_res101_person_parts.mat (OneDrive) (coming soon)
 * ReineNet trained on Cityscapes dataset (ResNet-101) for street scene parsing: 
-
-refinenet_res101_cityscapes.mat  (OneDrive) (coming soon)
+	*refinenet_res101_cityscapes.mat  (OneDrive) (coming soon)
 
 
 Please see the following demo scripts to run and evaluate it on a test image. Run
