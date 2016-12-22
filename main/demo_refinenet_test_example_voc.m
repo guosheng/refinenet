@@ -7,7 +7,7 @@
 % ds_config.img_data_dir='../datasets/custom_data';
 
 
-function demo_refinenet_test_voc_custom_data()
+function demo_refinenet_test_example_voc()
 
 
 rng('shuffle');
@@ -28,23 +28,16 @@ run_config.gpu_idx=1;
 
 % result dir:
 result_name=['result_' datestr(now, 'YYYYmmDDHHMMSS') '_evaonly_custom_data'];
-result_dir=fullfile('../cache_data', 'custom_eva_data', result_name);
+result_dir=fullfile('../cache_data', 'test_examples_voc', result_name);
 
 
 % the folder that contains testing images:
-ds_config.img_data_dir='../datasets/custom_data';
+ds_config.img_data_dir='../datasets/example_imgs_voc';
 
 
 % using a trained model which is trained on VOC 2012
 run_config.trained_model_path='../model_trained/refinenet_res101_voc2012.mat';
 ds_config.class_info=gen_class_info_voc();
-
-
-% another example, using the object parsing model
-% run_config.trained_model_path='../model_trained/refinenet_res101_person_parts';
-% class_info=gen_class_info_object_parsing();
-
-
 
 
 
@@ -56,7 +49,7 @@ run_config.input_img_short_edge_max=800;
 
 % set the input image scales, useful for multi-scale evaluation
 % e.g. using multiple scale settings (1.0 0.8 0.6) and average the resulting score maps.
-run_config.input_img_scale=1;
+run_config.input_img_scale=0.8;
 
 
 run_config.gen_net_opts_fn=@gen_net_opts_model_type1;

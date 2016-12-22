@@ -4,6 +4,10 @@
 % here shows an example of
 % evaluating the segmentation performance of a trained model on the voc dataset:
 
+% Before running this demo file for evaluation, you need to 
+% download the PASCAL VOC 2012 dataset and place it at: 
+% ../datasets/voc2012_trainval
+
 
 function demo_refinenet_evaluate_voc()
 
