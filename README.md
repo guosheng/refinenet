@@ -29,20 +29,21 @@ First download the following trained models and put them in `./model_trained/`, 
 
 * Trained on PASCAL VOC 2012 dataset for object segmentation (ResNet-101): 
   * [refinenet_res101_voc2012.mat (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
-  * example scripts for applying this model: `demo_refinenet_test_example_voc.m`
-
+  
 * Trained on Person-Part dataset for object parsing (ResNet-101): 
   * [refinenet_res101_person_parts.mat (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBbZXGYA56ELRjedE)
-  * example scripts for applying this model: `demo_refinenet_test_example_person_parts.m`
 
 * Trained on Cityscapes dataset (ResNet-101) for street scene parsing: 
-  * [refinenet_res101_cityscapes.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBbuYTmQG_dGXAfn4)
-  * example scripts for applying this model: `demo_refinenet_test_example_cityscapes.m`
+  * [refinenet_res101_cityscapes.mat  (OneDrive, 400M)](https://1drv.ms/u/s!AmxAc3Al6cbBbuYTmQG_dGXAfn4)
 
 * Trained on SUNRGBD dataset (ResNet-101) for indoor scene understanding: 
-  * [refinenet_res101_sunrgbd.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBcPw22yUv67rEn1Y)
-  * example scripts for applying this model: `demo_refinenet_test_example_sunrgbd.m`
+  * [refinenet_res101_sunrgbd.mat  (OneDrive, 400M)](https://1drv.ms/u/s!AmxAc3Al6cbBcPw22yUv67rEn1Y)
 
+* Trained on PASCAL-Context dataset (ResNet-101) for scene understanding: 
+  * [refinenet_res101_pascalcontext.mat  (OneDrive, 400M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
+
+* example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
+  * e.g., `demo_refinenet_test_example_voc.m`, `demo_refinenet_test_example_person_parts.m`, `demo_refinenet_test_example_cityscapes.m`
 
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the trained model;

@@ -48,10 +48,10 @@ run_config.use_gpu=true;
 run_config.gpu_idx=1;
 
 % use a random model name:
-% model_name=['model_' datestr(now, 'YYYYmmDDHHMMSS')];
+model_name=['model_' datestr(now, 'YYYYmmDDHHMMSS')];
 
 % or specify a model_name for training, if the cached snapshot files existed, it will resume training
-model_name='model_20161219094311_example';
+% model_name='model_20161219094311_example';
 
 % update the model name when reducing learning rate for training, e.g.,
 % model_name='model_20161219094311_example_epoch70_low_learn_rate';
