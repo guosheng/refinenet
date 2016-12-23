@@ -26,15 +26,15 @@ You can find the network graphs that illustrate our architecture in the folder `
 First download the following trained models and put them in `./model_trained/`, then refer to the example scripts for applying the trained model on test images.
 
 * Trained on PASCAL VOC 2012 dataset for object segmentation (ResNet-101): 
-  * [refinenet_res101_voc2012.mat (OneDrive)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
+  * [refinenet_res101_voc2012.mat (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
   * example scripts for applying this model: `demo_refinenet_test_example_voc.m`
 
 * Trained on Person-Part dataset for object parsing (ResNet-101): 
-  * [refinenet_res101_person_parts.mat (OneDrive)](https://1drv.ms/u/s!AmxAc3Al6cbBbZXGYA56ELRjedE)
+  * [refinenet_res101_person_parts.mat (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBbZXGYA56ELRjedE)
   * example scripts for applying this model: `demo_refinenet_test_example_person_parts.m`
 
 * Trained on Cityscapes dataset (ResNet-101) for street scene parsing: 
-  * [refinenet_res101_cityscapes.mat  (OneDrive)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
+  * [refinenet_res101_cityscapes.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
   * example scripts for applying this model: `demo_refinenet_test_example_cityscapes.m`
 
 
