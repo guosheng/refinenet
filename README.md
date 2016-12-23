@@ -3,7 +3,7 @@ This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
 
 RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation". Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid.
 
-**A MATLAB based state-of-the-art image semantic segmentation and dense prediction framework!**
+A MATLAB based framework for semantic image segmentation and dense prediction.
 
 
 # Update notes
@@ -48,13 +48,12 @@ Example scripts for applying these models can be found at: `demo_refinenet_test_
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the trained model;
 
-We include the improved version of chained pooling in this code, which may achieve better result than using the above provided models. 
-
 
 # Training
 The following demo is provided for training a RefineNet on your own dataset
 * `demo_refinenet_train.m`
 
+We include the improved version of chained pooling in this code, which may achieve better result than using the above provided models. 
 
 
 # Citation
