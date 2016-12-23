@@ -48,6 +48,7 @@ Example scripts for applying these models can be found at: `demo_refinenet_test_
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the trained model;
 
+We include the improved version of chained pooling in this code, which may achieve better result than using the above provided models. 
 
 
 # Training
