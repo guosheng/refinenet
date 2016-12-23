@@ -42,8 +42,8 @@ First download the following trained models and put them in `./model_trained/`, 
 * Trained on PASCAL-Context dataset (ResNet-101) for scene understanding: 
   * [refinenet_res101_pascalcontext.mat  (OneDrive, 400M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
 
-* example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
-  * e.g., `demo_refinenet_test_example_voc.m`, `demo_refinenet_test_example_person_parts.m`, `demo_refinenet_test_example_cityscapes.m`
+Example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
+* e.g., `demo_refinenet_test_example_voc.m`, `demo_refinenet_test_example_person_parts.m`, `demo_refinenet_test_example_cityscapes.m`
 
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the trained model;
