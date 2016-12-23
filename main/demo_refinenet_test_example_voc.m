@@ -93,7 +93,7 @@ imdb.ref.data_norm_info=data_norm_info;
 
 if run_config.use_gpu
 	gpu_num=gpuDeviceCount;
-	if gpu_num>1
+	if gpu_num>=1
 		gpuDevice(run_config.gpu_idx);
     else
         error('no gpu found!');
