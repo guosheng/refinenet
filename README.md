@@ -3,6 +3,8 @@ This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
 
 RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation". Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid.
 
+A MATLAB based state-of-the-art image semantic segmentation and dense prediction framework!
+
 
 # Update notes
 We did a major update of our code on 23 Dec 2016. If you use an older version, please check out a new copy.
