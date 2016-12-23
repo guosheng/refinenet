@@ -35,8 +35,12 @@ run_config.input_img_short_edge_max=800;
 % class_info=gen_class_info_person_parts();
 % run_config.trained_model_path='../model_trained/person_parts_refinenet_res101_legacy';
 
-class_info=gen_class_info_cityscapes();
-run_config.trained_model_path='../model_trained/cityscapes_refinenet_res101_legacy';
+% class_info=gen_class_info_cityscapes();
+% run_config.trained_model_path='../model_trained/cityscapes_refinenet_res101_legacy';
+
+class_info=gen_class_info_sunrgbd();
+run_config.trained_model_path='../model_trained/sunrgbd_refinenet_res101_legacy';
+
 
 run_config.trained_model_path_updated=[run_config.trained_model_path '_updated'];
 

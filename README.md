@@ -3,7 +3,7 @@ This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
 
 RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation". Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid.
 
-A MATLAB based state-of-the-art image semantic segmentation and dense prediction framework!
+**A MATLAB based state-of-the-art image semantic segmentation and dense prediction framework!**
 
 
 # Update notes
@@ -38,6 +38,10 @@ First download the following trained models and put them in `./model_trained/`, 
 * Trained on Cityscapes dataset (ResNet-101) for street scene parsing: 
   * [refinenet_res101_cityscapes.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBbuYTmQG_dGXAfn4)
   * example scripts for applying this model: `demo_refinenet_test_example_cityscapes.m`
+
+* Trained on SUNRGBD dataset (ResNet-101) for indoor scene understanding: 
+  * [refinenet_res101_sunrgbd.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBcPw22yUv67rEn1Y)
+  * example scripts for applying this model: `demo_refinenet_test_example_sunrgbd.m`
 
 
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
