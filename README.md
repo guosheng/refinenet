@@ -34,7 +34,7 @@ First download the following trained models and put them in `./model_trained/`, 
   * example scripts for applying this model: `demo_refinenet_test_example_person_parts.m`
 
 * Trained on Cityscapes dataset (ResNet-101) for street scene parsing: 
-  * [refinenet_res101_cityscapes.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBa42jLruLYscVIiw)
+  * [refinenet_res101_cityscapes.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBbuYTmQG_dGXAfn4)
   * example scripts for applying this model: `demo_refinenet_test_example_cityscapes.m`
 
 
