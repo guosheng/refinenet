@@ -3,6 +3,8 @@ classdef BatchNorm < dagnn.ElementWise
     numChannels
     epsilon = 1e-5
     opts = {'NoCuDNN'} % ours seems slightly faster
+    noise_param_idx
+    noise_cache_size
     bnorm_moment_type_trn
     bnorm_moment_type_tst
   end
