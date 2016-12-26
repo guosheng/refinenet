@@ -13,8 +13,8 @@ function demo_refinenet_test_example_cityscapes()
 rng('shuffle');
 
 addpath('./my_utils');
-dir_matConvNet='../libs/matconvnet_20160516_cuda70_cudnn5_bnchanged/matlab/';
-run([dir_matConvNet 'vl_setupnn.m']);
+dir_matConvNet='../libs/matconvnet/matlab';
+run(fullfile(dir_matConvNet, 'vl_setupnn.m'));
 
 
 run_config=[];

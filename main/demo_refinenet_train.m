@@ -36,8 +36,8 @@ function demo_refinenet_train()
 rng('shuffle');
 
 addpath('./my_utils');
-dir_matConvNet='../libs/matconvnet_20160516_cuda70_cudnn5_bnchanged/matlab/';
-run([dir_matConvNet 'vl_setupnn.m']);
+dir_matConvNet='../libs/matconvnet/matlab';
+run(fullfile(dir_matConvNet, 'vl_setupnn.m'));
 
 
 run_config=[];
@@ -161,9 +161,9 @@ run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
 
 % uncomment the following for debug:
 % select a subset for both training and evaluation.
-% ds_info.train_idxes=ds_info.train_idxes(1:10);
+% ds_info.train_idxes=ds_info.train_idxes(1:5);
 % ds_info.test_idxes=ds_info.train_idxes;
-% run_config.snapshot_step=10;
+% run_config.snapshot_step=inf;
 
 
 train_opts=run_config.gen_net_opts_fn(run_config, ds_info.class_info);
