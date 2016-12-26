@@ -11,8 +11,7 @@ We did a major update of our code on 23 Dec 2016. If you use an older version, p
 
 
 # Installation
-* Install [MatConvNet](http://www.vlfeat.org/matconvnet/) and CuDNN.
-* A modified copy of MatConvNet is provided in `./lib/`. Details of this modification can be found in `main/my_matconvnet_resnet/README.txt`.
+* Install [MatConvNet](http://www.vlfeat.org/matconvnet/) and CuDNN. A modified copy of MatConvNet is provided in `./lib/`. Details of this modification can be found in `main/my_matconvnet_resnet/README.txt`.
 * An example script for exporting lib paths is
   * `main/my_matlab.sh` 
 * Download the following ImageNet pretrained models from [MatConvNet](http://www.vlfeat.org/matconvnet/pretrained/) and place them in `./model_trained/`.
