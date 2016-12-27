@@ -3,31 +3,52 @@
 
 % This file shows how to perform training on your own dataset.
 
+% 1. Training demo on PASCAL VOC 2012 dataset
+
+% We here demonstrate the training on the original PASCAL VOC 2012 dataset for semantic segmentation.
 % Before running this demo file for training, you need to 
 % download the PASCAL VOC 2012 dataset and place it at: 
 % ../datasets/voc2012_trainval
 
-% Training on other dataset:
+
+% 2. Training on other dataset:
+
 % other datasets can be handled in a similar way as the VOC2012 dataset.
 % Basically the users need to provide a file to describe your dataset:
 % my_gen_ds_info_[your dataset name].m
 % please refer to my_gen_ds_info_voc.m for details
 
-% Training instructions:
 
-% Stage 1: using a fixed learning rate for training util the performance
-% get stable on the validation set.
+% 3. Training instructions:
 
-% Stage 2: chose one cached model, initilize from this model, and using a
-% lowler learning rate (e.g., multiplied by 0.1) to peform further training. 
+% Stage-1: using a fixed learning rate for training until the performance
+% get stable on the validation set. You need to manually stop the running of this training code.
+
+% Stage-2: chose one cached model, initialize from this model, and using a
+% lower learning rate (e.g., multiplied by 0.1) to perform further training. 
 
 % For example, using the following setting for loading an existed model and
 % using a lower learning rate:
 % run_config.trained_model_path='../cache_data/voc2012_trainval/model_20161219094311_example/model_cache/epoch_70';
 % run_config.learning_rate=5e-5;
 
-% Please refer to the following demo file for perform further training with lowler learning rate:
+% Please refer to the following demo file for perform further training with lower learning rate:
 % demo_refinenet_train_reduce_learning_rate.m
+
+
+% 4. Verify your trained model with performance evaluation:
+
+% This demo file shows the training on the original PASCAL VOC 2012 dataset for semantic segmentation.
+% This dataset consists of 1464 training images and 1449 validation images. 
+% For this dataset, the training will take around 3 days using a Titan-X card, 
+% including the training with a decreased learning rate.
+
+% After training, the intersection over union (IoU) score of the trained model is supposed to be around 0.691. 
+
+% If you cannot get similar result, please verify whether you are using our modified version of MatConvNet,
+% for which you need to replace the modified files in the original MatConvNet and compile after replacement.
+% Details can be found at ./my_matconvnet_resnet/README.txt
+
 
 
 function demo_refinenet_train()
