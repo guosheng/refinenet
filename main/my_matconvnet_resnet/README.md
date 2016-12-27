@@ -18,9 +18,9 @@ Modified files are included in this folder.
 
 * copy files in the folder `./+dagnn` to `../../libs/matconvnet/matlab/+dagnn`
 
-* copy files in the folder ./@DagNN to `../../libs/matconvnet/matlab/+dagnn/@DagNN`
+* copy files in the folder `./@DagNN` to `../../libs/matconvnet/matlab/+dagnn/@DagNN`
 
-* copy files in the folder ./impl to `../../libs/matconvnet/matlab/src/bits/impl`
+* copy files in the folder `./impl` to `../../libs/matconvnet/matlab/src/bits/impl`
 
 We change the gradient calculation in the batch normalization layer for the backward propagation step.
 Changed lines in these files are marked by "changed for refinenet".
@@ -29,8 +29,7 @@ thus the gradient calculation are modified from the original implementation.
 
 
 2. After the above file replacement, you need to compile the MatConvNet to apply the changes.
-Follow the install instructions in MatConvNet for compiling, please refer to the below web page for details:
-http://www.vlfeat.org/matconvnet/install/
+Please refer to the MatConvNet install instruction [web page](http://www.vlfeat.org/matconvnet/install/) for compiling.
 
 An example compiling MATLAB script is as follows:
 
