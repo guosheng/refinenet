@@ -14,7 +14,7 @@ function update_legacy_model()
 rng('shuffle');
 
 addpath('./my_utils');
-dir_matConvNet='../libs/matconvnet_20160516_cuda70_cudnn5_bnchanged/matlab/';
+dir_matConvNet='../libs/matconvnet/matlab/';
 run([dir_matConvNet 'vl_setupnn.m']);
 
 
