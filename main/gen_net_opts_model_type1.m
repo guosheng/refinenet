@@ -109,7 +109,7 @@ train_opts.epoch_task_num_max=2000;
 train_opts.epoch_run_max_task_one_class=100;
 
 train_opts.epoch_task_gen_type_train='class_sample';
-% train_opts.epoch_task_gne_type_train='random';
+% train_opts.epoch_task_gen_type_train='random';
 
 
 
