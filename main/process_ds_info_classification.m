@@ -1,6 +1,6 @@
 
 
-function ds_info=process_ds_info(ds_info, ds_config)
+function ds_info=process_ds_info_classification(ds_info, ds_config)
 
 
 class_info=ds_info.class_info;

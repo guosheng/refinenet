@@ -68,7 +68,7 @@ ds_info.class_info=gen_class_info_voc();
 
 ds_info.ds_name='voc2012_trainval';
 
-ds_info=process_ds_info(ds_info, ds_config);
+ds_info=process_ds_info_classification(ds_info, ds_config);
 
 end
 

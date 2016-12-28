@@ -32,17 +32,24 @@ crop_box_size=min(min_edge_size, crop_box_size);
 
 gen_crop_point_type=data_crop_config.gen_crop_point_type;
 
+start_point=[];
+
 if strcmp(gen_crop_point_type, 'random')
     start_point=gen_crop_point_random(data_crop_config, imdb, work_info_batch, mask_data, crop_box_size);
-end
 
-if strcmp(gen_crop_point_type, 'class_sample')
+elseif strcmp(gen_crop_point_type, 'class_sample')
+    
     start_point=gen_crop_point_class_sample(data_crop_config, imdb, work_info_batch, mask_data, crop_box_size);
     if isempty(start_point)
         start_point=gen_crop_point_random(data_crop_config, imdb, work_info_batch, mask_data, crop_box_size);
     end
+
+else
+	
+	error('gen_crop_point_type not support!');
 end
 
+assert(~isempty(start_point));
 
 stop_point1=start_point(1)+crop_box_size-1;
 if stop_point1>img_size(1)

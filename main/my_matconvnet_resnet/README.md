@@ -5,6 +5,8 @@ We have modified the MatConvNet toolbox to suit our tasks.
 Basically, we change the batch normalization (BN) layers for using specified "moment" parameters for mean and variance, rather than computing from the batch. We need to modify the relevant files in DagNN and the gradient calculation for the implementation of BN layers.
 
 The MatConvNet included in this repository (`./libs/matconvnet`) are already modified and compiled with CUDA 7.0, CuDNN 5.0 and Ubuntu 14.04.
+You probably need to re-compile the provided MatConvNet to work with your environment, e.g., using the latest version of CUDA, CuDNN and Ubuntu. 
+Please refer to following instruction (in Step 2) for compiling.
 
 If you are using your own MatConvNet downloaded from the official website, you could follow the steps below to update your MatConvNet with our modified files and compile.
 

@@ -176,8 +176,9 @@ run_config.init_resnet_layer_num=50;
 % generate network
 run_config.gen_network_fn=@gen_network_main;
 
-run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
 
+run_config.gen_net_opts_fn=@gen_net_opts_model_type1;
+% run_config.gen_net_opts_fn=@gen_net_opts_model_type2;
 
 
 % uncomment the following for debug:
