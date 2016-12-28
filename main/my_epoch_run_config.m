@@ -127,14 +127,13 @@ end
 
 function valid_task_flags=gen_epoch_task_info(opts, imdb, work_info, work_info_epoch, can_task_subidxes)
 
-valid_task_flags=[];
-
 input_task_num=work_info_epoch.ref.input_task_num;
 if(input_task_num<=opts.epoch_task_num_min)
     valid_task_flags=true(input_task_num, 1);
     return;
 end
 
+valid_task_flags=[];
 
 if strcmp(opts.epoch_task_gen_type_train, 'class_sample')
     
