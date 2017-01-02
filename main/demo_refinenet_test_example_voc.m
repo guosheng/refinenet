@@ -45,7 +45,7 @@ ds_config.class_info=gen_class_info_voc();
 
 % for voc trained model, control the size of input images
 run_config.input_img_short_edge_min=450;
-run_config.input_img_short_edge_max=800;
+run_config.input_img_short_edge_max=600;
 
 % set the input image scales, useful for multi-scale evaluation
 % e.g. using multiple scale settings (1.0 0.8 0.6) and average the resulting score maps.
