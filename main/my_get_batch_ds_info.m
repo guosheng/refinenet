@@ -159,7 +159,7 @@ function batch_data=get_batch_data(train_opts, imdb, img_idx)
     end
             
     if isempty(batch_data)
-        batch_data=do_load_and_cache_batch_data(train_opts, imdb, img_idx);
+        batch_data=do_load_batch_data(train_opts, imdb, img_idx);
     end
 
 end
@@ -171,7 +171,8 @@ function do_ds_cache_all_before_run(train_opts, imdb)
     task_num=length(task_idxes);
     for t_idx=1:task_num
         one_task_idx=task_idxes(t_idx);
-        do_load_and_cache_batch_data(train_opts, imdb, one_task_idx);
+        batch_data=do_load_batch_data(train_opts, imdb, one_task_idx);
+        imdb.ref.data_cache_tasks{one_task_idx}=batch_data;
         if mod(t_idx, 200)==1 || t_idx==task_num
             fprintf('caching item:%d/%d\n', t_idx, task_num)
         end
@@ -180,7 +181,7 @@ function do_ds_cache_all_before_run(train_opts, imdb)
 end
 
 
-function batch_data=do_load_and_cache_batch_data(train_opts, imdb, img_idx)
+function batch_data=do_load_batch_data(train_opts, imdb, img_idx)
                         
     ds_info=imdb.ref.ds_info;
     img_data_batch=load_img_from_ds_info(ds_info, img_idx);
