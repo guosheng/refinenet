@@ -23,6 +23,7 @@ task_idxes=cat(1, task_idxes, task_info_train.task_idxes);
 task_idxes=cat(1, task_idxes, task_info_val.task_idxes);
 
 imdb.max_task_idx=max(task_idxes);
+imdb.task_idxes=task_idxes;
 
 make_ref_obj(imdb);
 
