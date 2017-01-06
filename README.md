@@ -44,6 +44,9 @@ First download the following trained models and put them in `./model_trained/`, 
 Example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
 * e.g., `demo_refinenet_test_example_voc.m`, `demo_refinenet_test_example_person_parts.m`, `demo_refinenet_test_example_cityscapes.m`
 
+A simplified version (much less configurations) of the test examples for applying the trained models can be found at: 
+`demo_test_simple_voc.m` and `demo_test_simple_city.m`.
+
 We also include a demo script to evaluate the trained models, e.g., in terms of IoU scores:
 * `demo_refinenet_evaluate_voc.m` to evaluate the segmentation performance of the trained model;
 
