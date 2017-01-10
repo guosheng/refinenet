@@ -41,6 +41,13 @@ First download the following trained models and put them in `./model_trained/`, 
 * Trained on PASCAL-Context dataset (ResNet-101) for scene understanding: 
   * [refinenet_res101_pascalcontext.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBdiWtNpOaBUM4gu0)
 
+* Trained on NYUDv2 dataset (ResNet-101) for indoor scene understanding: 
+  * [refinenet_res101_nyud.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBeeFAGfTfUngTIdw)
+
+* Trained on MIT ADE20K dataset (ResNet-152) for scene understanding: 
+  * [refinenet_res152_ade.mat  (OneDrive, 456M)](https://1drv.ms/f/s!AmxAc3Al6cbBfGqgFawGNdcd5-I)
+
+
 Example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
 * e.g., `demo_refinenet_test_example_voc.m`, `demo_refinenet_test_example_person_parts.m`, `demo_refinenet_test_example_cityscapes.m`
 
