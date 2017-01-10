@@ -45,7 +45,7 @@ First download the following trained models and put them in `./model_trained/`, 
   * [refinenet_res101_nyud.mat  (OneDrive, 426M)](https://1drv.ms/u/s!AmxAc3Al6cbBeeFAGfTfUngTIdw)
 
 * Trained on MIT ADE20K dataset (ResNet-152) for scene understanding: 
-  * [refinenet_res152_ade.mat  (OneDrive, 456M)](https://1drv.ms/f/s!AmxAc3Al6cbBfGqgFawGNdcd5-I)
+  * [refinenet_res152_ade.mat  (OneDrive, 456M)](https://1drv.ms/u/s!AmxAc3Al6cbBeJVS5UmzUuCZ-cE)
 
 
 Example scripts for applying these models can be found at: `demo_refinenet_test_example_[dataset name].m`
