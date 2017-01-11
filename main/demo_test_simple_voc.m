@@ -49,7 +49,7 @@ for img_idx=1:img_num
     
     [~, img_name]=fileparts(task_info.img_filename);
     one_cache_file=fullfile(result_dir, [img_name '.png']);
-    fprintf('save prdict mask:%s\n', one_cache_file);
+    fprintf('save predict mask:%s\n', one_cache_file);
     imwrite(task_result.mask_data, run_config.class_info.mask_cmap, one_cache_file);
 end
 

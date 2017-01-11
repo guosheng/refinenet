@@ -245,7 +245,7 @@ function tmp_result_info=gen_task_result(ds_info, seg_param, predict_mask_net, s
     tmp_result_info.img_size=size(predict_mask_data);
     tmp_result_info.class_info=class_info;
     tmp_result_info.img_name=img_name;
-    tmp_result_info.score_map=score_map_org;
+    tmp_result_info.score_map=im2uint8(score_map_org);
      
     
 end
