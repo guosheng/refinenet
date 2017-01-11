@@ -288,8 +288,8 @@ function refine_config=gen_refine_config_basic()
     refine_config.use_chained_pool=true;
     
     % set the pooling number to 2 or 4:
-    refine_config.chained_pool_num=2;
-%     refine_config.chained_pool_num=4;
+    % refine_config.chained_pool_num=2;
+    refine_config.chained_pool_num=4;
     
     refine_config.chained_pool_size=5;
     
