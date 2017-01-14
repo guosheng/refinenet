@@ -32,6 +32,8 @@ result_dir=fullfile('../cache_data', 'test_examples_nyud', result_name);
 
 
 % the folder that contains testing images:
+
+% NOTES: if testing on NYUDv2 images, you may need to remove the white border of the images
 ds_config.img_data_dir='../datasets/example_imgs_nyud';
 
 
