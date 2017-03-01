@@ -103,7 +103,7 @@ train_opts.do_train=true;
 train_opts.do_eva_val=true;
 
 train_opts.do_cache_model=true;
-train_opts.epoch_num=2000;
+train_opts.epoch_num=500;
 
 train_opts.fig_plot_step=1;
 train_opts.input_net_do_bp=true;
