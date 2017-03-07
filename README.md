@@ -2,7 +2,7 @@
 This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
 
 ```
-*RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation*
+RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation
 Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid
 In CVPR 2017
 ```
