@@ -70,16 +70,13 @@ We include the improved version of chained pooling in this code, which may achie
 If you find the code useful, please cite our work as
 
 ```
-@article{refinenet,
+@inproceedings{Lin:2017:RefineNet,
 	title = {Refine{N}et: {M}ulti-Path Refinement Networks for High-Resolution Semantic Segmentation},
 	shorttitle = {RefineNet: Multi-Path Refinement Networks},
-	url = {https://arxiv.org/abs/1611.06612},
-	journal = {arXiv:1611.06612 [cs]},
+	booktitle = {CVPR},
 	author = {Lin, G. and Milan, A. and Shen, C. and Reid, I.},
-	month = nov,
-	year = {2016},
-	note = {arXiv: 1611.06612},
-	keywords = {Computer Science - Computer Vision and Pattern Recognition}
+	month = jul,
+	year = {2017}
 }
 ```
 # License
