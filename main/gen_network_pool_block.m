@@ -27,7 +27,12 @@ else
     block = My_sum_layer() ;
 end
 
-block.numInputs=2;
+assert(isa(inputs, 'cell'));
+if size(inputs, 1)>1
+    inputs=inputs';
+    joint_input_dims=joint_input_dims';
+end
+block.numInputs=length(inputs);
 
 dag_net.addLayer(...
     name, ...

@@ -3,7 +3,7 @@
 
 % This is an example of resume training with lower learning rate.
 
-function demo_refinenet_train_reduce_learn_rate()
+function demo_refinenet_train_reduce_learning_rate()
 
 
 rng('shuffle');
@@ -105,6 +105,7 @@ run_config.run_evaonly=false;
 run_config.trained_model_path='../cache_data/voc2012_trainval/model_20161219094311_example/model_cache/epoch_70';
 run_config.learning_rate=5e-5;
 
+run_config.epoch_num=600;
 
 % turn on this option to cache all data into memory, if it's possible
 % run_config.cache_data_mem=true;
@@ -116,8 +117,8 @@ run_config.crop_box_size=400;
 % for cityscape, using a larger crop:
 % run_config.crop_box_size=600;
 
-% evaluate step: do evaluation every 10 epochs, can be set to 5:
-run_config.eva_run_step=10;
+% evaluate step: do evaluation every 5 epochs, can be set to 10:
+run_config.eva_run_step=5;
 run_config.snapshot_step=1;
 
 % choose ImageNet pre-trained resnet:

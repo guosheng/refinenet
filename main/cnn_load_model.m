@@ -52,6 +52,22 @@ function [net_config, exp_info]=cnn_load_model(input_path)
 end
 
 
+function dag_net=fix_dagnn_name(dag_net)
+
+check_file_names={'inputs'; 'outputs'; 'params'};
+
+for l_idx=1:length(dag_net.layers)
+    for f_idx=1:length(check_file_names)
+        one_field_name=check_file_names{f_idx};
+        one_v=dag_net.layers(l_idx).(one_field_name);
+        if size(one_v, 1)>1
+            dag_net.layers(l_idx).(one_field_name)=one_v';
+        end
+    end
+end
+
+end
+
 function process_dagnn_load(net_config)
 
 assert(isa(net_config, 'ref_obj'));
@@ -60,6 +76,7 @@ for group_idx=1:length(net_config.ref.group_infos)
     group_info=net_config.ref.group_infos{group_idx};
     if check_group_dag_net(group_info)
         fprintf('processing dag_net for loading, group_idx:%d, group_name: %s\n', group_info.group_idx, group_info.name);
+        group_info.dag_net=fix_dagnn_name(group_info.dag_net);
         group_info.dag_net = dagnn.DagNN.loadobj(group_info.dag_net) ;
         net_config.ref.group_infos{group_idx}=group_info;
     end

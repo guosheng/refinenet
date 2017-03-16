@@ -96,7 +96,10 @@ train_opts.do_train=true;
 train_opts.do_eva_val=true;
 
 train_opts.do_cache_model=true;
-train_opts.epoch_num=400;
+
+if ~isfield(train_opts, 'epoch_num')
+    train_opts.epoch_num=700;
+end
 
 train_opts.fig_plot_step=1;
 train_opts.input_net_do_bp=true;
@@ -205,8 +208,9 @@ data_crop_config=[];
 
 data_crop_config.do_crop=true;
 
-% data_crop_config.gen_crop_point_type='random';
 data_crop_config.gen_crop_point_type='class_sample';
+% data_crop_config.gen_crop_point_type='random';
+
 data_crop_config.crop_box_step_ratio=0.2;
 data_crop_config.crop_box_size=run_config.crop_box_size;
 
