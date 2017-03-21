@@ -68,12 +68,35 @@ end
 
 end
 
+
+function group_info=fix_layer_name(group_info)
+  
+  % for legacy model
+
+    if ~isempty(group_info.net_info)
+      net_info=group_info.net_info;
+        for l_idx=1:length(net_info.ref.layers)
+            tmp_layer=net_info.ref.layers{l_idx};
+            if isfield(tmp_layer, 'custom_type')
+              if strcmp(tmp_layer.custom_type, 'unary_softmaxloss')
+                  tmp_layer.custom_type='dense_softmaxloss';
+                  net_info.ref.layers{l_idx}=tmp_layer;
+              end
+            end
+        end
+    end
+end
+
+
 function process_dagnn_load(net_config)
 
 assert(isa(net_config, 'ref_obj'));
   
 for group_idx=1:length(net_config.ref.group_infos)
     group_info=net_config.ref.group_infos{group_idx};
+
+    group_info=fix_layer_name(group_info);
+
     if check_group_dag_net(group_info)
         fprintf('processing dag_net for loading, group_idx:%d, group_name: %s\n', group_info.group_idx, group_info.name);
         group_info.dag_net=fix_dagnn_name(group_info.dag_net);
