@@ -5,9 +5,10 @@ class_info_ADE=load('class_info_ADE.mat');
 class_info_ADE=class_info_ADE.class_info_ADE;
 
 class_names=class_info_ADE.Name;
-class_names{end+1}='void';
+assert(size(class_names, 2)==1);
+class_names=cat(1, {'void'}, class_names);
 
-class_label_values=uint8([1:150 0]);
+class_label_values=uint8([0 1:150]);
 
 
 
