@@ -9,6 +9,10 @@ In CVPR 2017
 
 A MATLAB based framework for semantic image segmentation and general dense prediction tasks on images.
 
+# Results
+RefineNet Results on the CityScapes Dataset
+
+[![RefineNet Results on the CityScapes Dataset](http://img.youtube.com/vi/L0V6zmGP_oQ/0.jpg)](https://www.youtube.com/watch?v=L0V6zmGP_oQ)
 
 # Update notes
 We did a major update of our code on 23 Dec 2016. If you use an older version, please check out a new copy.
