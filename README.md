@@ -87,6 +87,7 @@ Please also refer to the `Network architecture` section below for more details a
     * The generated masks and scores maps will be saved in your disk.  Note that the score maps are saved in the format of `uint8` with values in [0 255]. You need to cast them into `double` and normalize into [0 1] if you want to use them.
     * The above demo files are able to perform multi-scale prediction and evaluation (e.g., in terms of IoU scores) in a single run. However, in the default setting, the performance evaluation part is disabled.
 Please refer to the comments in the demo files to turn on the performance evaluation. 
+    * For NYUDv2 datasets, you may need to remove the white border of the images before applying our model. More details and crop tools can be found in the NYUDv2 dataset webpage.
 
 #### 2. Single scale prediction and evaluation
 
