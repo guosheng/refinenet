@@ -46,7 +46,7 @@ A MATLAB based framework for semantic image segmentation and general dense predi
 Put the downloaded models in `./model_trained/`    
     * ***(`new!`)*** `RefineNet models using ResNet-101`: [Google Drive](https://drive.google.com/open?id=1U2c1N6QJdzB_8HBgXb7mJ6Qk66JDBHI9) or [Baidu Pan](https://pan.baidu.com/s/1nxf2muP)
     * ***(`new!`)*** `RefineNet models using ResNet-152`: [Google Drive](https://drive.google.com/open?id=1UGhqllXOn_qmDhx_3C9aKCoilZGgycFf) or [Baidu Pan](https://pan.baidu.com/s/1bqDwrWN)
-* ***Important notes:***: 
+* ***Important notes:***
     *  The trained models of the the following datasets are using improved residual pooling: 
 `NYUDv2, Person_Parts, PASCAL_Context, SUNRGBD, ADE20k` 
 These models will give better performance than the reported results in our CVPR paper. 
