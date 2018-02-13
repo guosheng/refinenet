@@ -16,7 +16,7 @@ A MATLAB based framework for semantic image segmentation and general dense predi
     We add demo files for multi-scale prediction, fusion and evaluation. 
     Please refer to the `Testing` section below for more details.
     2.  ***New models available:*** trained models using improved residual pooling.
-    Available for these datasets: NYUDv2, Person_Parts, PASCAL_Context, SUNRGBD, ADE20k
+    Available for these datasets: NYUDv2, Person_Parts, PASCAL_Context, SUNRGBD, ADE20k.
     These models will give better performance than the reported results in our CVPR paper.
     3.  ***New models available:*** trained models using ResNet-152 for all 7 datasets.
     Apart from ResNet-101 based models, our ResNet-152 based models of all 7 datasets are now available for download.
@@ -49,7 +49,6 @@ Put the downloaded models in `./model_trained/`
 * ***Important notes:***
     *  The trained models of the the following datasets are using improved residual pooling: 
 `NYUDv2, Person_Parts, PASCAL_Context, SUNRGBD, ADE20k`. 
-
 These models will give better performance than the reported results in our CVPR paper. 
 Please also refer to the `Network architecture` section below for more details about improved pooling.
     * The model for `VOC2012` is updated. We previously uploaded a wrong model.
