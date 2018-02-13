@@ -68,6 +68,9 @@ end
 
 function do_save_results(ds_info, seg_param, predict_mask_net, score_map_org, predict_result_densecrf)
 
+    predict_mask_net=gather(predict_mask_net);
+    score_map_org=gather(score_map_org);
+
     img_idx=seg_param.img_idx;
     eva_param=seg_param.eva_param;
     class_info=eva_param.class_info;
