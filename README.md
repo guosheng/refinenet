@@ -87,21 +87,20 @@ Please also refer to the `Network architecture` section below for more details a
     * The generated masks and scores maps will be saved in your disk.  Note that the score maps are saved in the format of `uint8` with values in [0 255]. You need to cast them into `double` and normalize into [0 1] if you want to use them.
     * The above demo files are able to perform multi-scale prediction and evaluation (e.g., in terms of IoU scores) in a single run. However, in the default setting, the performance evaluation part is disabled.
 Please refer to the comments in the demo files to turn on the performance evaluation. 
-    * For NYUDv2 datasets, you may need to remove the white border of the images before applying our model. More details and crop tools can be found in the NYUDv2 dataset webpage.
+    * Trained models using improved residual pooling will give better performance than the reported results in our CVPR paper. Please refer to the above section `Trained models` for more details.
+    * For the images from NYUDv2 dataset, you may need to remove the white borders of the images before applying our models. More details and crop tools can be found in the NYUDv2 dataset webpage.
 
 #### 2. Single scale prediction and evaluation
 
 *   Single scale prediction and evaluation can be done by changing the scale setting in the multi-scale prediction demo files. Please refer the the above section for multi-scale prediction.
 
-*  We also provide a simplified version (much less configurations) of prediction demo files, and these files are only for single scale prediction.
-    * Examples can be found at: `demo_test_simple_voc.m` and `demo_test_simple_city.m`.
-
+*  We also provide simplified demo files for prediction with much less configurations. They are only for single scale prediction. Examples can be found at: `demo_test_simple_voc.m` and `demo_test_simple_city.m`.
     
 
 
 
 #### 3. Evaluation and fusion on saved results ***(`new!`)*** 
-* We provide an example script to perform multi-scale fusion on a number of saved predictions:
+* We provide an example script to perform multi-scale fusion on a number of predictions saved in your disk:
     * `demo_fuse_saved_prediction_voc.m` : fuse multiple cached predictions to generate the final prediction
 * We provide an example script to evaluate the prediction masks saved in your disk:
     * `demo_evaluate_saved_prediction_voc.m` : evaluate the segmentation performance, e.g., in terms of IoU scores.
