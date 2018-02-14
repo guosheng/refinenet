@@ -10,9 +10,20 @@ my_check_file(predict_result_dir);
 
 result_info=do_eva_conmat(gt_mask_dir, predict_result_dir, class_info);
 
-% for verifying the prediction:
-% result_info.result_info_ADE_toolkit=do_eva_ADE_toolkit(gt_mask_dir, predict_result_dir, class_info);
 
+do_verify=false;
+% do_verify=true;
+
+if do_verify
+    % for verifying the evaluation scores with another toolkit
+    result_info.result_info_ADE_toolkit=do_eva_ADE_toolkit(gt_mask_dir, predict_result_dir, class_info);
+
+    disp('result_info:')
+    disp(result_info);
+
+    disp('result_info.result_info_ADE_toolkit');
+    disp(result_info.result_info_ADE_toolkit);
+end
 
 end
 
@@ -85,19 +96,37 @@ fileinfos=dir(fullfile(predict_dir, '*.png'));
 test_num=length(fileinfos);
 assert(test_num>0)
 
-class_num=length(class_info.class_label_values);
-valid_class_num=class_num;
+void_class_flags=ismember(class_info.class_label_values, class_info.void_label_values);
+valid_class_num=nnz(~void_class_flags);
 
-if ~isempty(class_info.void_label_values)
-    void_class_flags=ismember(class_info.void_label_values, class_info.class_label_values);
-    if any(void_class_flags)
-        asssert(nnz(void_class_flags)==1);
-        % assumn that void class idx should be the last class label, otherwise
-        % it will have some problem
-        assert(void_class_flags(end));
+need_transfer_label=false;
+
+if any(void_class_flags)
+    assert(nnz(void_class_flags)==1);
+
+    assert(void_class_flags(end) || void_class_flags(1));
+
+    if void_class_flags(end)
+        % in one case, the void label is 255, void class idx should be the last class label
+        need_transfer_label=true;        	
     end
-    valid_class_num=class_num-nnz(void_class_flags);
+
+    if void_class_flags(1)
+        % in another case, the void label is 0, void class idx should be the first class label
+        assert(class_info.void_label_values==0);
+    end
+    
 end
+
+if ~need_transfer_label
+    % in this case, class labels should be in a regualr form
+	valid_class_labels=class_info.class_label_values(~void_class_flags);
+	expected_label_values=(1:length(valid_class_labels))';
+	assert(all(valid_class_labels(:)==expected_label_values));
+end
+
+
+appeared_labels_in_gt=[];
 
 for i = 1:test_num
     file_name=fileinfos(i).name;
@@ -106,11 +135,15 @@ for i = 1:test_num
     gt_mask=imread(gt_file);
     predict_mask=imread(predict_file);
     
-    gt_mask=do_transfer_mask(gt_mask, class_info);
-    gt_mask=handle_void_class_ADE_toolkit(gt_mask, class_info);
+    appeared_labels_in_gt=unique(cat(1, appeared_labels_in_gt, unique(gt_mask)));
     
-    predict_mask=do_transfer_mask(predict_mask, class_info);
-    predict_mask=handle_void_class_ADE_toolkit(predict_mask, class_info);
+    if need_transfer_label
+	    gt_mask=do_transfer_mask(gt_mask, class_info);
+	    gt_mask=handle_void_class_ADE_toolkit(gt_mask, class_info);
+	    
+	    predict_mask=do_transfer_mask(predict_mask, class_info);
+	    predict_mask=handle_void_class_ADE_toolkit(predict_mask, class_info);
+	end
     
     [area_intersection(:,i), area_union(:,i)]=intersectionAndUnion_ADE_toolkit(predict_mask, gt_mask, valid_class_num);
     
@@ -120,9 +153,18 @@ for i = 1:test_num
 end
 IoU = sum(area_intersection,2)./sum(eps+area_union,2);
 
+appeared_valid_labels_in_gt=appeared_labels_in_gt(~ismember(appeared_labels_in_gt, class_info.void_label_values));
+result_info.appeared_valid_labels_in_gt=appeared_valid_labels_in_gt;
+result_info.appeared_valid_label_num_in_gt=length(result_info.appeared_valid_labels_in_gt);
+result_info.appeared_label_iou_mean=sum(IoU)./result_info.appeared_valid_label_num_in_gt;
 
+% update the vliad_class_num, only count those appeared in groundtruth masks.
+result_info.original_valid_class_num=valid_class_num;
+valid_class_num=result_info.appeared_valid_label_num_in_gt;
+
+result_info.valid_class_num=valid_class_num;
 result_info.inter_union_score_classes=IoU;
-result_info.inter_union_score_mean=mean(IoU);
+result_info.inter_union_score_mean=sum(IoU)./valid_class_num;
 
 
 end
