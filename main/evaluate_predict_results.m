@@ -119,7 +119,7 @@ if any(void_class_flags)
 end
 
 if ~need_transfer_label
-    % in this case, class labels should be in a regualr form
+    % in this case, class labels should be in a regular form
 	valid_class_labels=class_info.class_label_values(~void_class_flags);
 	expected_label_values=(1:length(valid_class_labels))';
 	assert(all(valid_class_labels(:)==expected_label_values));

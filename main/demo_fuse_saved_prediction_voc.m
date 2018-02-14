@@ -3,7 +3,7 @@ function demo_fuse_saved_prediction_voc()
 
 addpath('./my_utils');
 
-% privoding preidction mask folders, e.g., results generated using different scales. should replace by your folders here:
+% providing prediction mask folders, e.g., results generated using different scales. should replace by your folders here:
 predict_result_dirs=[];
 predict_result_dirs{end+1}='../cache_data/test_examples_voc/result_20180212182355_evaonly_custom_data_valset_5scales/predict_result_1';
 predict_result_dirs{end+1}='../cache_data/test_examples_voc/result_20180212182355_evaonly_custom_data_valset_5scales/predict_result_2';

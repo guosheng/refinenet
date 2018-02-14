@@ -1,6 +1,6 @@
 
 % Author: Guosheng Lin (guosheng.lin@gmail.com)
-% example code for multiscale preidctions, fusion and accuracy evaluation
+% example code for multi-scale predictions, fusion and accuracy evaluation
 
 function demo_predict_mscale_cityscapes()
 
@@ -37,7 +37,7 @@ run_config.trained_model_path='../model_trained/refinenet_res101_cityscapes.mat'
 ds_config.class_info=gen_class_info_cityscapes();
 
 % control the size of input images to avoid excessively small or large images
-run_config.input_img_short_edge_min=450;
+run_config.input_img_short_edge_min=600;
 run_config.input_img_short_edge_max=1100; %cityscapes images are larger than others
 %-------------------------------------------------------------------------------------------------------------------------
 
@@ -46,21 +46,21 @@ run_config.input_img_short_edge_max=1100; %cityscapes images are larger than oth
 % specify the folder that contains testing images:
 img_data_dir='../datasets/example_imgs_cityscapes';
 
-% providing groundtruth mask folder for evaluation, or set to empty if not avaiable
-% if the folder of grountruth masks are provided (an example is shown below), 
-% this code will perform evaluation after multiscale prediction and fusion.
+% providing ground-truth mask folder for evaluation, or set to empty if not available
+% if the folder of ground-truth masks are provided (an example is shown below), 
+% this code will perform evaluation after multi-scale prediction and fusion.
 gt_mask_dir=[];
 
 
 
 %-------------------------------------------------------------------------------------------------------------------------
 % settings for accuracy evaluation after multi-scale prediction and fusion:
-% the following example specifies images for testing and the groundtruth masks for evaluation:
+% the following example specifies images for testing and the ground-truth masks for evaluation:
 
-% Notes: for the evaluation purpose, the image folder should only contain val set images, excluding any training images:
-% Notes: the groundtruch masks should follow the class label definition in the varaible specifed above: 'ds_config.class_info'
+% Notes: for the evaluation purpose, the image folder should only contain testing images, excluding any training images:
+% Notes: the ground-truth masks should follow the class label definition in the variable specified above: 'ds_config.class_info'
 
-% uncomment the following lines to enable accuracy evaluation:
+% uncomment the following lines to enable accuracy evaluation, should replace by your folders:
 
 % img_data_dir='../datasets/cityscapes/images_testonly';
 % gt_mask_dir='../datasets/cityscapes/gt_testonly';
@@ -197,7 +197,7 @@ else
 end
 
 
-% evalute the final fused result, if groundtruth is provided
+% evaluate the final fused result, if ground-truth is provided
 result_evaluate_param=ds_config.result_evaluate_param;
 if ~isempty(result_evaluate_param) && ~isempty(result_evaluate_param.gt_mask_dir)
 	result_evaluate_param.predict_result_dir=fullfile(final_prediction_dir, 'predict_result_mask');
