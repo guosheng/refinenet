@@ -1,15 +1,15 @@
 # Multipath RefineNet
 A MATLAB based framework for semantic image segmentation and general dense prediction tasks on images.   
 
-This is the source code for the following paper and its extensions.     
-RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation; CVPR 2017   
+This is the source code for the following paper and its extensions:
+1. RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation; CVPR 2017   
 [https://arxiv.org/abs/1611.06612](https://arxiv.org/abs/1611.06612)    
-Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363) in TPAMI 2019   
+2. Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363) in TPAMI 2019   
 
 # Pytorch implementation
 This codebase only provides MATLAB and MatConvNet based implementation.
 
-Vladimir Nekrasov provids a Pytorch implementation and a light-weight version of RefineNet at:   
+Vladimir Nekrasov provides a Pytorch implementation and a light-weight version of RefineNet at:   
 [https://github.com/DrSleep/refinenet-pytorch](https://github.com/DrSleep/refinenet-pytorch)
 
 
