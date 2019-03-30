@@ -1,15 +1,15 @@
 # Multipath RefineNet
 A MATLAB based framework for semantic image segmentation and general dense prediction tasks on images.   
 
-This is the source code for the following paper and its extensions:
+This is the source code for the following paper and its extension:
 1. RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation; CVPR 2017   
 [https://arxiv.org/abs/1611.06612](https://arxiv.org/abs/1611.06612)    
-2. Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363)
+2. RefineNet extension in TPAMI 2019: [DOI Link](https://doi.org/10.1109/TPAMI.2019.2893630)
 
 # Pytorch implementation
 This codebase only provides MATLAB and MatConvNet based implementation.
 
-Vladimir Nekrasov provides a Pytorch implementation and a light-weight version of RefineNet at:   
+Vladimir Nekrasov kindly provides a Pytorch implementation and a light-weight version of RefineNet at:   
 [https://github.com/DrSleep/refinenet-pytorch](https://github.com/DrSleep/refinenet-pytorch)
 
 
@@ -103,8 +103,8 @@ Please refer to the comments in the demo files to turn on the performance evalua
 
 
 
-#### 3. Evaluation and fusion on saved results ***(`new!`)*** 
-* We provide an example script to perform multi-scale fusion on a number of predictions saved in your disk:
+#### 3. Evaluation and fusion on saved results (score map files and mask files) ***(`new!`)*** 
+* We provide an example script to perform multi-scale fusion on a number of predictions (score maps) saved in your disk:
     * `demo_fuse_saved_prediction_voc.m` : fuse multiple cached predictions to generate the final prediction
 * We provide an example script to evaluate the prediction masks saved in your disk:
     * `demo_evaluate_saved_prediction_voc.m` : evaluate the segmentation performance, e.g., in terms of IoU scores.
