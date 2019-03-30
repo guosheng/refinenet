@@ -1,13 +1,17 @@
 # Multipath RefineNet
-This is the source code for our [paper](https://arxiv.org/abs/1611.06612):
+A MATLAB based framework for semantic image segmentation and general dense prediction tasks on images.   
 
-```
-RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation
-Guosheng Lin, Anton Milan, Chunhua Shen, Ian Reid
-In CVPR 2017
-```
+This is the source code for the following paper and its extensions.     
+RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation; CVPR 2017   
+[https://arxiv.org/abs/1611.06612](https://arxiv.org/abs/1611.06612)    
+Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363) in TPAMI 2019   
 
-A MATLAB based framework for semantic image segmentation and general dense prediction tasks on images.
+# Pytorch implementation
+This codebase only provides MATLAB and MatConvNet based implementation.
+
+Vladimir Nekrasov provids a Pytorch implementation and a light-weight version of RefineNet at:   
+[https://github.com/DrSleep/refinenet-pytorch](https://github.com/DrSleep/refinenet-pytorch)
+
 
 # Update notes
 * 23 Dec 2016:  We did a major update of our code. 
@@ -130,5 +134,19 @@ If you find the code useful, please cite our work as
   year = {2017}
 }
 ```
+
+and
+
+```
+@article{lin2019refinenet,
+  title={RefineNet: Multi-Path Refinement Networks for Dense Prediction},
+  author={Lin, Guosheng and Liu, Fayao and Milan, Anton and Shen, Chunhua and Reid, Ian},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  year={2019},
+  publisher={IEEE},
+  doi={10.1109/TPAMI.2019.2893630}, 
+}
+```
+
 # License
 For academic usage, the code is released under the permissive BSD license. For any commercial purpose, please contact the authors.
