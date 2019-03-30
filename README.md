@@ -4,7 +4,7 @@ A MATLAB based framework for semantic image segmentation and general dense predi
 This is the source code for the following paper and its extensions:
 1. RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation; CVPR 2017   
 [https://arxiv.org/abs/1611.06612](https://arxiv.org/abs/1611.06612)    
-2. Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363) in TPAMI 2019   
+2. Journal extension: [Link](https://ieeexplore.ieee.org/abstract/document/8618363)
 
 # Pytorch implementation
 This codebase only provides MATLAB and MatConvNet based implementation.
