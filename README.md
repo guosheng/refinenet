@@ -51,11 +51,14 @@ Put the downloaded models in `./model_trained/`
     * ***(`new!`)*** `RefineNet models using ResNet-101`: [Google Drive](https://drive.google.com/open?id=1U2c1N6QJdzB_8HBgXb7mJ6Qk66JDBHI9) or [Baidu Pan](https://pan.baidu.com/s/1nxf2muP)
     * ***(`new!`)*** `RefineNet models using ResNet-152`: [Google Drive](https://drive.google.com/open?id=1UGhqllXOn_qmDhx_3C9aKCoilZGgycFf) or [Baidu Pan](https://pan.baidu.com/s/1bqDwrWN)
 * ***Important notes:***
+    * For the test set performance of our method on the dataset PASCAl VOC and Cityscapes, kindly note that we do **not** use any images in the validation set for training. Our models are trained **only** using the training set images. 
     *  The trained models of the the following datasets are using improved residual pooling: 
 `NYUDv2, Person_Parts, PASCAL_Context, SUNRGBD, ADE20k`.
 These models will give better performance than the reported results in our CVPR paper. 
 Please also refer to the `Network architecture` section below for more details about improved pooling.
-    * The model for `VOC2012` is updated. We previously uploaded a wrong model.
+    * The model for `VOC2012` is updated. We previously uploaded a wrong model.   
+    
+    
 
 
 # Network architecture and implementation
